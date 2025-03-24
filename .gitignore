@@ -2,3 +2,14 @@
 
 bin/
 obj/
+
+EmployeeBonusManagementSystem.Api/obj/
+EmployeeBonusManagementSystem.Api/bin/
+EmployeeBonusManagementSystem.Domain/bin/
+EmployeeBonusManagementSystem.Domain/obj/
+EmployeeBonusManagementSystem.Persistence/bin/
+EmployeeBonusManagementSystem.Persistence/obj/
+EmployeeBonusManagementSystem.Infrastructure/bin/
+EmployeeBonusManagementSystem.Infrastructure/obj/
+EmployeeBonusManagementSystem.Application/bin/
+EmployeeBonusManagementSystem.Application/obj/
