@@ -11,3 +11,16 @@ D:\DevAcademy\Final Project\ProjectLanda\EmployeeBonusManagementSystem.Domain\ob
 D:\DevAcademy\Final Project\ProjectLanda\EmployeeBonusManagementSystem.Domain\obj\Debug\net8.0\refint\EmployeeBonusManagementSystem.Domain.dll
 D:\DevAcademy\Final Project\ProjectLanda\EmployeeBonusManagementSystem.Domain\obj\Debug\net8.0\EmployeeBonusManagementSystem.Domain.pdb
 D:\DevAcademy\Final Project\ProjectLanda\EmployeeBonusManagementSystem.Domain\obj\Debug\net8.0\ref\EmployeeBonusManagementSystem.Domain.dll
+D:\DevAcademy\Final Project\ProjectFinalVersion\EmployeeBonusManagementSystem.Domain\bin\Debug\net8.0\EmployeeBonusManagementSystem.Domain.deps.json
+D:\DevAcademy\Final Project\ProjectFinalVersion\EmployeeBonusManagementSystem.Domain\bin\Debug\net8.0\EmployeeBonusManagementSystem.Domain.dll
+D:\DevAcademy\Final Project\ProjectFinalVersion\EmployeeBonusManagementSystem.Domain\bin\Debug\net8.0\EmployeeBonusManagementSystem.Domain.pdb
+D:\DevAcademy\Final Project\ProjectFinalVersion\EmployeeBonusManagementSystem.Domain\obj\Debug\net8.0\EmployeeBonusManagementSystem.Domain.csproj.AssemblyReference.cache
+D:\DevAcademy\Final Project\ProjectFinalVersion\EmployeeBonusManagementSystem.Domain\obj\Debug\net8.0\EmployeeBonusManagementSystem.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\DevAcademy\Final Project\ProjectFinalVersion\EmployeeBonusManagementSystem.Domain\obj\Debug\net8.0\EmployeeBonusManagementSystem.Domain.AssemblyInfoInputs.cache
+D:\DevAcademy\Final Project\ProjectFinalVersion\EmployeeBonusManagementSystem.Domain\obj\Debug\net8.0\EmployeeBonusManagementSystem.Domain.AssemblyInfo.cs
+D:\DevAcademy\Final Project\ProjectFinalVersion\EmployeeBonusManagementSystem.Domain\obj\Debug\net8.0\EmployeeBonusManagementSystem.Domain.csproj.CoreCompileInputs.cache
+D:\DevAcademy\Final Project\ProjectFinalVersion\EmployeeBonusManagementSystem.Domain\obj\Debug\net8.0\EmployeeBonusManagementSystem.Domain.sourcelink.json
+D:\DevAcademy\Final Project\ProjectFinalVersion\EmployeeBonusManagementSystem.Domain\obj\Debug\net8.0\EmployeeBonusManagementSystem.Domain.dll
+D:\DevAcademy\Final Project\ProjectFinalVersion\EmployeeBonusManagementSystem.Domain\obj\Debug\net8.0\refint\EmployeeBonusManagementSystem.Domain.dll
+D:\DevAcademy\Final Project\ProjectFinalVersion\EmployeeBonusManagementSystem.Domain\obj\Debug\net8.0\EmployeeBonusManagementSystem.Domain.pdb
+D:\DevAcademy\Final Project\ProjectFinalVersion\EmployeeBonusManagementSystem.Domain\obj\Debug\net8.0\ref\EmployeeBonusManagementSystem.Domain.dll

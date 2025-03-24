@@ -6,7 +6,7 @@ namespace EmployeeBonusManagementSystem.Persistence.Configurations;
 
 public class BonusEntityConfiguration : IEntityTypeConfiguration<BonusEntity>
 {
-    public void Configure(EntityTypeBuilder<BonusEntity> builder)
+		public void Configure(EntityTypeBuilder<BonusEntity> builder)
     {
         builder.ToTable("Bonuses");
 

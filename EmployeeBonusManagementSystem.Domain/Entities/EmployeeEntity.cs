@@ -28,4 +28,7 @@ public class EmployeeEntity : BaseEntity
     //
     public string RefreshToken { get; set; }
 
+	public LogsEntity Logs { get; set; }
+	public ErrorLogsEntity ErrorLogs { get; set; }
+
 }
