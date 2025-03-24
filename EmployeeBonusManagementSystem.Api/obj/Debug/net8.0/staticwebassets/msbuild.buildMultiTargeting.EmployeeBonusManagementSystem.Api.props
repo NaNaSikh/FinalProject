@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\EmployeeBonusManagementSystem.Api.props" />
+</Project>

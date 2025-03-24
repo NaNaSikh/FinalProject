@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "PS3WCKVMzbvSwcYUceGCIpvQUCH8pKqO4lw3aOepzgU=",
+  "Source": "EmployeeBonusManagementSystem.Api",
+  "BasePath": "_content/EmployeeBonusManagementSystem.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
