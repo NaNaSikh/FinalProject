@@ -49,16 +49,15 @@ var builder = WebApplication.CreateBuilder(args);
 	    });
     });
 
-
-builder.Services.AddAutoMapper(typeof(EmployeeProfile));
-builder.Services.AddAutoMapper(typeof(BonusProfile));
-
-builder.Services.AddHttpContextAccessor();
+    builder.Services.AddLogging();
 
 
+	builder.Services.AddAutoMapper(typeof(EmployeeProfile));
+	builder.Services.AddAutoMapper(typeof(BonusProfile));
 
+	builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(AddEmployeeCommand).Assembly));
+	builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(AddEmployeeCommand).Assembly));
 
 
 	builder.Services.AddPersistence(builder.Configuration);
@@ -95,7 +94,7 @@ builder.Services.AddAuthorization(options =>
 
 
 
-
+	
 
 // Configure the HTTP request pipeline.
 var app = builder.Build();

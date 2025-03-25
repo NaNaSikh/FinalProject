@@ -14,9 +14,8 @@ namespace EmployeeBonusManagementSystem.Domain.Entities
         public DateTime TimeStamp { get; set; }
         public int UserId { get; set; }
         public string ActionType { get; set; }
-        public string Data { get; set; }
-        public EmployeeEntity Employee { get; set; }
-
+        public string Request { get; set; }
+        public string Response { get; set; }
 
 	}
 }

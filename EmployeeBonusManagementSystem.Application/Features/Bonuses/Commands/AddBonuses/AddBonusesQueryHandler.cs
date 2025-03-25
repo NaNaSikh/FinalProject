@@ -1,11 +1,14 @@
-﻿using EmployeeBonusManagementSystem.Application.Contracts.Persistence;
+﻿using Azure;
+using EmployeeBonusManagementSystem.Application.Contracts.Persistence;
 using EmployeeBonusManagementSystem.Domain.Entities;
 using EmployeeBonusManagementSystem.Persistence;
 using MediatR;
+using System.Text.Json;
 
 namespace EmployeeBonusManagementSystem.Application.Features.Bonuses.Commands.AddBonuses;
 
-public class AddBonusesQueryHandler( IUnitOfWork unitOfWork) : IRequestHandler<AddBonusesQuery, List<AddBonusesDto>>
+public class AddBonusesQueryHandler( IUnitOfWork unitOfWork , IUserContextService userContextService ,ILoggingRepository loggingRepository) 
+	: IRequestHandler<AddBonusesQuery, List<AddBonusesDto>>
 {
     public async Task<List<AddBonusesDto>> Handle(
         AddBonusesQuery request,
@@ -18,20 +21,32 @@ public class AddBonusesQueryHandler( IUnitOfWork unitOfWork) : IRequestHandler<A
             await unitOfWork.OpenAsync();
             await unitOfWork.BeginTransactionAsync();
 
+            int userId = userContextService.GetUserId();
+
             var employeeExists = await unitOfWork.EmployeeRepository.GetEmployeeExistsByPersonalNumberAsync(request.PersonalNumber);
             if (!employeeExists.Item1)
             {
                 throw new Exception($"თანამშრომელი პირადი ნომრით {request.PersonalNumber} არ მოიძებნა.");
             }
 
-
             var bonuses = await unitOfWork.BonusRepository.AddBonusAsync(new BonusEntity
             {
                 EmployeeId = employeeExists.Item2,
                 Amount = request.BonusAmount
-            });
+            } , userId);
 
-            await unitOfWork.CommitAsync();
+			var logEntity = new LogsEntity
+			{
+				TimeStamp = DateTime.UtcNow,
+				UserId = userId,
+				ActionType = "AddBonus",
+				Request = JsonSerializer.Serialize(request),
+				Response = JsonSerializer.Serialize(bonuses)
+
+			};
+			await loggingRepository.LogInformationAsync(logEntity);
+
+			await unitOfWork.CommitAsync();
             return bonuses;
         }
 

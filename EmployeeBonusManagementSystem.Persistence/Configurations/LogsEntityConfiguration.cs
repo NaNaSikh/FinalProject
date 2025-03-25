@@ -24,13 +24,11 @@ namespace EmployeeBonusManagementSystem.Persistence.Configurations
 				.IsRequired();
 			builder.Property(b => b.ActionType)
 				.IsRequired();
-			builder.Property(b => b.Data)
+			builder.Property(b => b.Request)
+				.IsRequired();
+			builder.Property(b => b.Response)
 				.IsRequired();
 
-			builder.HasOne<EmployeeEntity>(l => l.Employee)
-				.WithOne(e => e.Logs)
-				.HasForeignKey<LogsEntity>(l => l.UserId)  
-				.OnDelete(DeleteBehavior.Cascade);
 		}
 
 	}

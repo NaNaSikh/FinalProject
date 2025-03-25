@@ -14,28 +14,18 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories;
 public class BonusRepository(
         ISqlQueryRepository sqlQueryRepository,
         ISqlCommandRepository sqlCommandRepository,
-        IConfiguration configuration,  IHttpContextAccessor httpContextAccessor)
+        IConfiguration configuration)
         : IBonusRepository
 
 {
-    public async Task<List<AddBonusesDto>> AddBonusAsync(BonusEntity bonus)
+    public async Task<List<AddBonusesDto>> AddBonusAsync(BonusEntity bonus, int userId)
 
     {
         try
         {
-	        var userIdClaim = httpContextAccessor.HttpContext?.User?.FindFirst("Id");
-
-	        if (userIdClaim == null)
-	        {
-		        throw new UnauthorizedAccessException("User ID not found in token.");
-	        }
-
-	        int userId = int.Parse(userIdClaim.Value);
-
-
 			var bonusesResult = await sqlQueryRepository.LoadMultipleData<AddBonusesDto, dynamic>(
             "AddBonuses",
-            new { EmployeeId = bonus.EmployeeId, BonusAmount = bonus.Amount , CreateByUser = userId },
+            new { EmployeeId = bonus.EmployeeId, BonusAmount = bonus.Amount , CreateByUserId = userId },
             configuration.GetConnectionString("DefaultConnection"),
             CommandType.StoredProcedure);
 

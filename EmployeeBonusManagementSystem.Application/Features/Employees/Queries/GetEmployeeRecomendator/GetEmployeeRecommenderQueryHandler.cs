@@ -15,29 +15,21 @@ namespace EmployeeBonusManagementSystem.Application.Features.Employees.Queries.G
     {
     private readonly IEmployeeRepository _employeeRepository;
     private readonly IMapper _mapper;
-    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IUserContextService _userContextService;
 
-    public GetEmployeeRecommenderQueryHandler(IEmployeeRepository employeeRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+		public GetEmployeeRecommenderQueryHandler(IEmployeeRepository employeeRepository, IMapper mapper, IUserContextService userContextService)
     {
 	    _employeeRepository = employeeRepository;
 	    _mapper = mapper;
-	    _httpContextAccessor = httpContextAccessor;
+	    _userContextService = userContextService;
     }
 
     public async Task<List<GetEmployeeRecommenderDto>> Handle(GetEmployeeRecommenderQuery request, CancellationToken cancellationToken)
     {
-	    var userIdClaim = _httpContextAccessor.HttpContext?.User?.FindFirst("Id");
+			int userId = _userContextService.GetUserId();
 
-	    Console.WriteLine($"User id is : {userIdClaim}");
-	    if (userIdClaim == null)
-	    {
-		    throw new UnauthorizedAccessException("User ID not found in token.");
-	    }
-
-	    int userId = int.Parse(userIdClaim.Value);
-
-	    var bonuses = await _employeeRepository.GetEmployeeRecomender(userId);
-	    return _mapper.Map<List<GetEmployeeRecommenderDto>>(bonuses);
+			var bonuses = await _employeeRepository.GetEmployeeRecomender(userId);
+			return _mapper.Map<List<GetEmployeeRecommenderDto>>(bonuses);
     }
     }
 }

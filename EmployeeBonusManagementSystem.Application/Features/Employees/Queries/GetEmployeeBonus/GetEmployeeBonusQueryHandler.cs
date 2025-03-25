@@ -15,26 +15,18 @@ namespace EmployeeBonusManagementSystem.Application.Features.Employees.Queries.G
 	{
 		private readonly IEmployeeRepository _employeeRepository;
 		private readonly IMapper _mapper;
-		private readonly IHttpContextAccessor _httpContextAccessor;
+		private readonly IUserContextService _userContextService;
 
-		public GetEmployeeBonusQueryHandler(IEmployeeRepository employeeRepository, IMapper mapper , IHttpContextAccessor httpContextAccessor)
+		public GetEmployeeBonusQueryHandler(IEmployeeRepository employeeRepository, IMapper mapper, IUserContextService userContextService)
 		{
 			_employeeRepository = employeeRepository;
 			_mapper = mapper;
-			_httpContextAccessor = httpContextAccessor;
+			_userContextService = userContextService;
 		}
 
 		public async Task<List<GetEmployeeBonusDto>> Handle(GetEmployeeBonusQuery request, CancellationToken cancellationToken)
 		{
-			var userIdClaim = _httpContextAccessor.HttpContext?.User?.FindFirst("Id");
-
-			if (userIdClaim == null)
-			{
-				throw new UnauthorizedAccessException("User ID not found in token.");
-			}
-
-			int userId = int.Parse(userIdClaim.Value);
-
+			int userId = _userContextService.GetUserId();
 			var bonuses = await _employeeRepository.GetEmployeeBonus(userId);
 			return _mapper.Map<List<GetEmployeeBonusDto>>(bonuses);
 		}

@@ -1,10 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Dapper;
 using EmployeeBonusManagementSystem.Application.Contracts.Persistence;
+using EmployeeBonusManagementSystem.Domain.Entities;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Abstractions;
+using Org.BouncyCastle.Asn1.Cms;
+using Org.BouncyCastle.Bcpg;
 
 namespace EmployeeBonusManagementSystem.Persistence.Repositories
 {
@@ -21,16 +27,43 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories
 
 		}
 
-		public void LogInformation(string message, params object[] args)
-	    {
-		    _logger.LogInformation(message, args);
-		    //TODO add to database logic here 
+		public async Task LogInformationAsync(LogsEntity logsEntity)
+		{
+			_logger.LogInformation("Logging Action: {ActionType} by User {UserId} at {TimeStamp}",
+				logsEntity.ActionType, logsEntity.UserId, logsEntity.TimeStamp);
 
+			var query = @"INSERT INTO Logs (TimeStamp, UserId, ActionType, Request, Response) 
+                  VALUES (@TimeStamp, @UserId, @ActionType, @Request , @Response);";
+
+			if (_unitOfWork.Connection.State != ConnectionState.Open)
+			{
+				await _unitOfWork.OpenAsync();
+			}
+
+			try
+			{
+				await _unitOfWork.Connection.ExecuteAsync(query, new
+				{
+					TimeStamp = logsEntity.TimeStamp,
+					UserId = logsEntity.UserId,
+					ActionType = logsEntity.ActionType,
+					Request = logsEntity.Request,
+					Response = logsEntity.Response
+				}, _unitOfWork.Transaction);  // ✅ Use existing transaction
+
+				// ✅ Do NOT commit or rollback here, let the UoW handle it
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error adding Logging Information: {Message}", ex.Message);
+				throw;
+			}
 		}
 
-		public void LogError(string message, Exception exception, params object[] args)
+
+		public async Task LogErrorInformationAsync  (LogsEntity logsEntity)
 	    {
-		    _logger.LogError(exception, message, args);
+		   // _logger.LogError();
 		    //TODO add to database logic here 
 
 		}

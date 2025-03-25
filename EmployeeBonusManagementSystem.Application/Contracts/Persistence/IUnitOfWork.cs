@@ -27,7 +27,8 @@ namespace EmployeeBonusManagementSystem.Persistence
 	    Task<int> CompleteAsync();
 	    Task CloseAsync();
 	    Task OpenAsync();
+	    IDbTransaction Transaction { get; }
 
 
-	}
+    }
 }

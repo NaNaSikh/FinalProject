@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EmployeeBonusManagementSystem.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250324182602_logging")]
-    partial class logging
+    [Migration("20250325124239_logs")]
+    partial class logs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -313,9 +313,6 @@ namespace EmployeeBonusManagementSystem.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
                     b.ToTable("ErrorLogs", (string)null);
                 });
 
@@ -331,7 +328,11 @@ namespace EmployeeBonusManagementSystem.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Data")
+                    b.Property<string>("Request")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Responce")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -342,9 +343,6 @@ namespace EmployeeBonusManagementSystem.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
 
                     b.ToTable("Logs", (string)null);
                 });
@@ -466,28 +464,6 @@ namespace EmployeeBonusManagementSystem.Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("EmployeeBonusManagementSystem.Domain.Entities.ErrorLogsEntity", b =>
-                {
-                    b.HasOne("EmployeeBonusManagementSystem.Domain.Entities.EmployeeEntity", "Employee")
-                        .WithOne("ErrorLogs")
-                        .HasForeignKey("EmployeeBonusManagementSystem.Domain.Entities.ErrorLogsEntity", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Employee");
-                });
-
-            modelBuilder.Entity("EmployeeBonusManagementSystem.Domain.Entities.LogsEntity", b =>
-                {
-                    b.HasOne("EmployeeBonusManagementSystem.Domain.Entities.EmployeeEntity", "Employee")
-                        .WithOne("Logs")
-                        .HasForeignKey("EmployeeBonusManagementSystem.Domain.Entities.LogsEntity", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Employee");
-                });
-
             modelBuilder.Entity("EmployeeBonusManagementSystem.Domain.Entities.RecommenderEmployeeEntity", b =>
                 {
                     b.HasOne("EmployeeBonusManagementSystem.Domain.Entities.EmployeeEntity", null)
@@ -500,15 +476,6 @@ namespace EmployeeBonusManagementSystem.Persistence.Migrations
                         .WithMany()
                         .HasForeignKey("RecommenderEmployeeId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("EmployeeBonusManagementSystem.Domain.Entities.EmployeeEntity", b =>
-                {
-                    b.Navigation("ErrorLogs")
-                        .IsRequired();
-
-                    b.Navigation("Logs")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

@@ -29,10 +29,7 @@ namespace EmployeeBonusManagementSystem.Persistence.Configurations
 			builder.Property(b => b.Exception)
 				.IsRequired();
 
-			builder.HasOne<EmployeeEntity>(l => l.Employee)
-				.WithOne(e => e.ErrorLogs)
-				.HasForeignKey<ErrorLogsEntity>(l => l.UserId)
-				.OnDelete(DeleteBehavior.Cascade);
+			
 		}
 	}
 }

@@ -51,3 +51,4 @@ public class BonusEntityConfiguration : IEntityTypeConfiguration<BonusEntity>
 	}
 }
 
+	

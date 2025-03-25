@@ -15,7 +15,5 @@ namespace EmployeeBonusManagementSystem.Domain.Entities
         public string Message { get; set; }
         public string Exception { get; set; }
 
-        public EmployeeEntity Employee { get; set; }
-
 	}
 }

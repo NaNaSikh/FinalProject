@@ -141,37 +141,32 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories.Implementations
 				await _unitOfWork.OpenAsync();
 			}
 
-			using (var transaction = _unitOfWork.BeginTransaction())
+			try
 			{
-				try
-				{
-					var query = @"
-				                SELECT 
-				                    Password 
-				                FROM
-				                    Employees(NOLOCK)
-				                WHERE
-				                    Id = @Id;";
+				var query = @"
+				            SELECT 
+				                Password 
+				            FROM
+				                Employees(NOLOCK)
+				            WHERE
+				                Id = @Id;";
 
-					var result = await _unitOfWork.Connection.QueryFirstOrDefaultAsync<string>(
-						query,
-						new { Id = Id },
-						transaction: transaction,  // Use the transaction from UOW
-						commandType: CommandType.Text
-					);
+				var result = await _unitOfWork.Connection.QueryFirstOrDefaultAsync<string>(
+					query,
+					new { Id = Id },
+					transaction: _unitOfWork.Transaction, 
+					commandType: CommandType.Text
+				);
 
-					transaction.Commit();
-
-					return result;
-				}
-				catch (Exception ex)
-				{
-					transaction.Rollback();
-					Console.WriteLine($"Error: {ex.Message}");
-					throw;
-				}
+				return result;
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine($"Error: {ex.Message}");
+				throw;
 			}
 		}
+
 
 		public async Task<EmployeeEntity> GetByIdAsync(int id)
 		{
@@ -183,7 +178,6 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories.Implementations
 		{
 			var userPassword = await GetEmployeePasswordByIdAsync(id);
 
-			Console.WriteLine($"userpassword from database first: {userPassword}");
 			if (string.IsNullOrEmpty(userPassword))
 			{
 				return PasswordVerificationResult.Failed;
@@ -195,12 +189,26 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories.Implementations
 
 		public async Task UpdateEmployeePasswordByIdAsync(int Id, string newHashedPassword)
 		{
-			Console.WriteLine($" newHashed password to add in database {newHashedPassword}");
 			string query = "UPDATE Employees SET Password = @PasswordHash WHERE Id = @Id";
 			var parameters = new { Id = Id, PasswordHash = newHashedPassword };
-			await _unitOfWork.Connection.ExecuteAsync(query, parameters);
 
+			if (_unitOfWork.Connection.State != ConnectionState.Open)
+			{
+				await _unitOfWork.OpenAsync();
+			}
+
+			try
+			{
+				await _unitOfWork.Connection.ExecuteAsync(query, parameters, transaction: _unitOfWork.Transaction);
+			}
+			catch (Exception ex)
+			{
+				//_logger.LogError(ex, "Error updating password for employee with Id: {Id}", Id);
+				Console.WriteLine(ex);
+				throw;
+			}
 		}
+
 
 		public async Task<EmployeeEntity> GetByEmailAsync(string email)
 		{

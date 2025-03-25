@@ -16,28 +16,19 @@ namespace EmployeeBonusManagementSystem.Application.Features.Employees.Queries.G
 	    private readonly IEmployeeRepository _employeeRepository;
 	    private readonly IMapper _mapper;
 		//metadatadan id-is wamosagebad 
-	    private readonly IHttpContextAccessor _httpContextAccessor;
+		private readonly IUserContextService _userContextService;
 
 
-		public GetEmployeeSalaryQueryHandler(IHttpContextAccessor httpContextAccessor, IEmployeeRepository employeeRepository, IMapper mapper)
+		public GetEmployeeSalaryQueryHandler(IUserContextService userContextService, IEmployeeRepository employeeRepository, IMapper mapper)
 	    {
-		    _httpContextAccessor = httpContextAccessor;
+		    _userContextService = userContextService;
 			_employeeRepository = employeeRepository;
 		    _mapper = mapper;
 	    }
 
 	    public async Task<List<GetEmployeeSalaryDto>> Handle(GetEmployeeSalaryQuery request, CancellationToken cancellationToken)
 	    {
-		    var userIdClaim = _httpContextAccessor.HttpContext?.User?.FindFirst("Id");
-
-			Console.WriteLine($"User id is : {userIdClaim}");
-		    if (userIdClaim == null)
-		    {
-			    throw new UnauthorizedAccessException("User ID not found in token.");
-		    }
-
-		    int userId = int.Parse(userIdClaim.Value);
-
+			int userId = _userContextService.GetUserId();
 			var salary = await _employeeRepository.GetEmployeeSalary(userId);
 		    return _mapper.Map<List<GetEmployeeSalaryDto>>(salary);
 	    }

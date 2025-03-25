@@ -11,6 +11,7 @@ using EmployeeBonusManagementSystem.Domain.Entities;
 namespace EmployeeBonusManagementSystem.Application.Mapping
 {
 	using AutoMapper;
+	using EmployeeBonusManagementSystem.Application.Features.Employees.Queries.GetAllEmployees;
 	using EmployeeBonusManagementSystem.Application.Features.Employees.Queries.GetEmployeeRecomendator;
 
 	public class EmployeeProfile : Profile
@@ -35,8 +36,8 @@ namespace EmployeeBonusManagementSystem.Application.Mapping
 				.ForMember(dest => dest.IsPasswordChanged, opt => opt.Ignore())
 				.ForMember(dest => dest.PasswordChangeDate, opt => opt.Ignore())
 				.ForMember(dest => dest.IsActive, opt => opt.Ignore());
-
-
+			CreateMap<GetAllEmployeesDto, EmployeeEntity>();
+			CreateMap< EmployeeEntity , GetAllEmployeesDto>();
 			CreateMap<EmployeeEntity, EmployeeDto>();
 			CreateMap<EmployeeEntity, GetEmployeeSalaryDto>();
 			CreateMap<EmployeeEntity, GetEmployeeRecommenderDto>();

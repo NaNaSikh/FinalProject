@@ -40,6 +40,7 @@ namespace EmployeeBonusManagementSystem.Application.Features.Employees.Commands.
 			{
 				try
 				{
+					//TODO fix  this 
 					Console.WriteLine($"[INFO] Handling AddEmployeeCommand for Employee: {request.EmployeeDto.FirstName}");
 
 					// Map EmployeeDto to EmployeeEntity
