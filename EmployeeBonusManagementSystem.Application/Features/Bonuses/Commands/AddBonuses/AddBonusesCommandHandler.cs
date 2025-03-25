@@ -46,6 +46,9 @@ public class AddBonusesQueryHandler( IUnitOfWork unitOfWork , IUserContextServic
 			};
 			await loggingRepository.LogInformationAsync(logEntity);
 
+			//to test 
+			//throw new Exception("Test Exception - Bonus module error!");
+
 			await unitOfWork.CommitAsync();
             return bonuses;
         }
@@ -85,7 +88,19 @@ public class AddBonusesQueryHandler( IUnitOfWork unitOfWork , IUserContextServic
         catch (Exception ex)
         {
             await unitOfWork.RollbackAsync();
-            throw new Exception(ex.Message);
+            Console.WriteLine($"[ERROR] Error occurred: {ex.Message}");
+
+            var errorLog = new ErrorLogsEntity
+            {
+	            TimeStamp = DateTime.UtcNow,
+	            UserId = userContextService.GetUserId(),
+	            Level = "Error",
+	            Message = "An error occurred while adding a Bonus.",
+	            Exception = ex.ToString()
+            };
+
+            await loggingRepository.LogErrorInformationAsync(errorLog);
+			throw new Exception(ex.Message);
         }
         finally
         {

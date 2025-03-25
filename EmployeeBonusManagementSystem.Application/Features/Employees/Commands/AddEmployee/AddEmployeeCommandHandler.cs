@@ -89,7 +89,19 @@ namespace EmployeeBonusManagementSystem.Application.Features.Employees.Commands.
 				{
 					transaction.Rollback();
 					Console.WriteLine($"[ERROR] Error occurred: {ex.Message}");
-					return new AddEmploeeResponseDto(){Success = false , Message = "Employee was not edded " };
+
+					var errorLog = new ErrorLogsEntity
+					{
+						TimeStamp = DateTime.UtcNow,
+						UserId = _userContextService.GetUserId(),
+						Level = "Error",
+						Message = "An error occurred while adding an employee.",
+						Exception = ex.ToString()
+					};
+
+					await _loggingRepository.LogErrorInformationAsync(errorLog);
+
+					return new AddEmploeeResponseDto() { Success = false, Message = "Employee was not added" };
 				}
 			}
 

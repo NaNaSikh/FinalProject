@@ -61,10 +61,36 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories
 		}
 
 
-		public async Task LogErrorInformationAsync  (LogsEntity logsEntity)
+		public async Task LogErrorInformationAsync  (ErrorLogsEntity errorlogsEntity)
 	    {
-		   // _logger.LogError();
-		    //TODO add to database logic here 
+			_logger.LogInformation("Logging Error: {Exception} by User {UserId} at {TimeStamp}",
+				errorlogsEntity.Exception, errorlogsEntity.UserId, errorlogsEntity.TimeStamp);
+
+			var query = @"INSERT INTO ErrorLogs (TimeStamp, UserId, Level, Message, Exception) 
+                  VALUES (@TimeStamp, @UserId, @Level, @Message , @Exception);";
+
+			if (_unitOfWork.Connection.State != ConnectionState.Open)
+			{
+				await _unitOfWork.OpenAsync();
+			}
+
+			try
+			{
+				await _unitOfWork.Connection.ExecuteAsync(query, new
+				{
+					TimeStamp = errorlogsEntity.TimeStamp,
+					UserId = errorlogsEntity.UserId,
+					Level = errorlogsEntity.Level,
+					Message = errorlogsEntity.Message,
+					Exception = errorlogsEntity.Exception
+				}, _unitOfWork.Transaction);  
+
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error adding Logging Information: {Message}", ex.Message);
+				throw;
+			}
 
 		}
 

@@ -10,6 +10,6 @@ namespace EmployeeBonusManagementSystem.Application.Contracts.Persistence
 	public interface ILoggingRepository
 	{
 		Task LogInformationAsync(LogsEntity logsEntity);
-		Task LogErrorInformationAsync(LogsEntity logsEntity);
+		Task LogErrorInformationAsync(ErrorLogsEntity errorLogsEntity);
 	}
 }

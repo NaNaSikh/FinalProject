@@ -190,7 +190,10 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories.Implementations
 
 		public async Task UpdateEmployeePasswordByIdAsync(int Id, string newHashedPassword)
 		{
-			string query = "UPDATE Employees SET Password = @PasswordHash WHERE Id = @Id";
+
+			//TODO add changePassword  here 
+
+			string query = "UPDATE Employees SET Password = @PasswordHash  WHERE Id = @Id";
 			var parameters = new { Id = Id, PasswordHash = newHashedPassword };
 
 			if (_unitOfWork.Connection.State != ConnectionState.Open)
