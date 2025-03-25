@@ -16,7 +16,6 @@ namespace EmployeeBonusManagementSystem.Application.Features.Employees.Common
         public string UserName { get; set; }
         public int DepartmentId { get; set; }
         public int? RecommenderEmployeeId { get; set; }
-        public int CreateByUserId { get; set; }
         public String Role { get; set; }
     }
 }

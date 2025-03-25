@@ -48,7 +48,7 @@ namespace EmployeeBonusManagementSystem.Application.Features.Employees.Commands.
 			{
 				try
 				{
-					
+					int userId = _userContextService.GetUserId();
 					Console.WriteLine($"[INFO] Handling AddEmployeeCommand for Employee: {request.EmployeeDto.FirstName}");
 
 					var employee = _mapper.Map<EmployeeEntity>(request.EmployeeDto);
@@ -59,6 +59,7 @@ namespace EmployeeBonusManagementSystem.Application.Features.Employees.Commands.
 					employee.RefreshToken = _jwtService.GenerateRefreshToken();
 					employee.CreateDate = DateTime.UtcNow;
 					employee.PasswordChangeDate = DateTime.UtcNow;
+					employee.CreateByUserId = userId;
 
 					await _employeeRepository.AddEmployeeAsync(employee, request.EmployeeDto.Role, transaction);
 
@@ -72,7 +73,7 @@ namespace EmployeeBonusManagementSystem.Application.Features.Employees.Commands.
 					var logEntity = new LogsEntity
 					{
 						TimeStamp = DateTime.UtcNow,
-						UserId = _userContextService.GetUserId(),
+						UserId = userId,
 						ActionType = "AddEmployee",
 						Request = JsonSerializer.Serialize(request),
 						Response = JsonSerializer.Serialize(response)
