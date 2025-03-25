@@ -4,7 +4,7 @@ using MediatR;
 namespace EmployeeBonusManagementSystem.Application.Features.Employees.Commands.AddEmployee
 {
 
-	public record AddEmployeeCommand : IRequest<bool>
+	public record AddEmployeeCommand : IRequest<AddEmploeeResponseDto>
 	{
 		public EmployeeDto EmployeeDto { get; }
 

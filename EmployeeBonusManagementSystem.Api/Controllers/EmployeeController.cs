@@ -41,12 +41,7 @@ namespace EmployeeBonusManagementSystem.Api.Controllers
 	    {
 		    var result = await _mediator.Send(new AddEmployeeCommand(employeeDto));
 
-		    if (result)
-		    {
-			    return Ok(new { message = "Employee added successfully" });
-		    }
-
-		    return BadRequest(new { message = "Failed to add employee" });
+		    return Ok(result);
 	    }
 
 		   

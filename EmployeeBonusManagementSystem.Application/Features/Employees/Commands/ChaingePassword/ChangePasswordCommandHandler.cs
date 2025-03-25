@@ -96,7 +96,7 @@ namespace EmployeeBonusManagementSystem.Application.Features.Employees.Commands.
 					catch (Exception ex)
 					{ 
 						_logger.LogError(ex, "Error updating password for User");
-						_unitOfWork.Rollback(); // Rollback on error
+						_unitOfWork.Rollback(); 
 						throw;
 					}
 

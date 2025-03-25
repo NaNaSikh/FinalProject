@@ -61,7 +61,7 @@ public static class PersistenceDI
 		services.AddScoped<IUserContextService, UserContextService>();
 
 
-		services.AddScoped<IRequestHandler<AddEmployeeCommand, bool>, AddEmployeeCommandHandler>();
+	//	services.AddScoped<IRequestHandler<AddEmployeeCommand, bool>, AddEmployeeCommandHandler>();
 
 		return services;
    

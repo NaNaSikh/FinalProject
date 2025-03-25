@@ -22,6 +22,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmployeeBonusManagementSystem.Persistence", "EmployeeBonusManagementSystem.Persistence\EmployeeBonusManagementSystem.Persistence.csproj", "{3C89B677-437A-49D4-9116-E5ABEE4FE542}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{14BFC0D1-B78C-493B-BF86-2334E75CE48D}"
+	ProjectSection(SolutionItems) = preProject
+		EmployeeBonusManagementSystem.Persistence\PersistenceDI.cs = EmployeeBonusManagementSystem.Persistence\PersistenceDI.cs
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "APIs", "APIs", "{ED635F95-6F83-4D58-A743-8219E35779B6}"
 EndProject

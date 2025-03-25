@@ -125,7 +125,8 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories.Implementations
 							INSERT INTO EmployeeRole (EmployeeId, RoleId)
 							VALUES (@EmployeeId, @RoleId)";
 
-				await _unitOfWork.Connection.ExecuteAsync(roleQuery, new { EmployeeId = employeeId, RoleId = roleId }, transaction);
+				  await _unitOfWork.Connection.ExecuteAsync(roleQuery, new { EmployeeId = employeeId, RoleId = roleId }, transaction);
+				
 			}
 			catch (Exception ex)
 			{
