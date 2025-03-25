@@ -1,5 +1,4 @@
 ﻿using EmployeeBonusManagementSystem.Application.Features.Bonuses.Commands.AddBonuses;
-using EmployeeBonusManagementSystem.Application.Features.Employees.Queries.GetEmployeeBonus;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,7 +16,7 @@ public class BonusController : ControllerBase
     }
 
     [HttpPost("AddBonus")]
-    public async Task<ActionResult<List<AddBonusesDto>>> AddBonus([FromBody] AddBonusesQuery request)
+    public async Task<ActionResult<List<AddBonusesDto>>> AddBonus([FromBody] AddBonusesCommand request)
     {
         var result = await _mediator.Send(request);
         return Ok(result);
