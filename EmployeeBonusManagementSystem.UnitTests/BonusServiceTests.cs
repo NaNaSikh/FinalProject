@@ -10,7 +10,7 @@ namespace EmployeeBonusManagementSystem.UnitTests
     {
         private readonly IBonusRepository _bonusRepository;
         private readonly IEmployeeRepository _employeeRepository;
-        private readonly AddBonusesQueryHandler _handler;
+        private readonly AddBonusesCommandHandler _handler;
         private readonly IUnitOfWork _unitOfWork;
 
 
@@ -19,7 +19,7 @@ namespace EmployeeBonusManagementSystem.UnitTests
             _bonusRepository = A.Fake<IBonusRepository>();
             _employeeRepository = A.Fake<IEmployeeRepository>();
             _unitOfWork = A.Fake<IUnitOfWork>();
-            _handler = new AddBonusesQueryHandler(_unitOfWork);
+            _handler = new AddBonusesCommandHandler(_unitOfWork);
             A.CallTo(() => _unitOfWork.EmployeeRepository).Returns(_employeeRepository);
             A.CallTo(() => _unitOfWork.BonusRepository).Returns(_bonusRepository);
         }

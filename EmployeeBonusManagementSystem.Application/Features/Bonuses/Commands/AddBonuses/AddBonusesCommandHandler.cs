@@ -1,14 +1,13 @@
-﻿using EmployeeBonusManagementSystem.Application.Contracts.Persistence;
-using EmployeeBonusManagementSystem.Domain.Entities;
+﻿using EmployeeBonusManagementSystem.Domain.Entities;
 using EmployeeBonusManagementSystem.Persistence;
 using MediatR;
 
 namespace EmployeeBonusManagementSystem.Application.Features.Bonuses.Commands.AddBonuses;
 
-public class AddBonusesQueryHandler( IUnitOfWork unitOfWork) : IRequestHandler<AddBonusesQuery, List<AddBonusesDto>>
+public class AddBonusesCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<AddBonusesCommand, List<AddBonusesDto>>
 {
     public async Task<List<AddBonusesDto>> Handle(
-        AddBonusesQuery request,
+        AddBonusesCommand request,
         CancellationToken cancellationToken)
 
     {
