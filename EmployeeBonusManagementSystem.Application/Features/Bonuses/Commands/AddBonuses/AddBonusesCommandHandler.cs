@@ -11,7 +11,7 @@ public class AddBonusesQueryHandler( IUnitOfWork unitOfWork , IUserContextServic
 	: IRequestHandler<AddBonusesQuery, List<AddBonusesDto>>
 {
     public async Task<List<AddBonusesDto>> Handle(
-        AddBonusesQuery request,
+        AddBonusesCommand request,
         CancellationToken cancellationToken)
 
     {

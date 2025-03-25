@@ -1,11 +1,20 @@
 ﻿using EmployeeBonusManagementSystem.Application.Features.Bonuses.Commands.AddBonuses;
+using EmployeeBonusManagementSystem.Application.Features.Bonuses.Commands.UpdateOrInsertBonusConfiguration;
 using EmployeeBonusManagementSystem.Domain.Entities;
-using System.Threading.Tasks;
 
 namespace EmployeeBonusManagementSystem.Application.Contracts.Persistence;
 
 public interface IBonusRepository
 {
-    public Task<List<AddBonusesDto>> AddBonusAsync(BonusEntity bonus, int userId);
+    public Task<List<AddBonusesDto>> AddBonusAsync(BonusEntity bonus);
+    Task<List<UpsertBonusConfigurationDto>> UpdateOrInsertBonusConfigurationAsync(
+    decimal? MaxBonusAmount,
+    int? MaxBonusPercentage,
+    int? MinBonusPercentage,
+    int? MaxRecommendationLevel,
+    int? RecommendationBonusRate,
+    int CreateByUserId);
+
 
 }
+

@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\DevAcademy\\Final Project\\ProjectFinalVersion\\EmployeeBonusManagementSystem.UnitTests\\EmployeeBonusManagementSystem.UnitTests.csproj": {}
+    "C:\\Users\\lmindiashvili\\Desktop\\Employeebonusmanagementsystem\\EmployeeBonusManagementSystem.UnitTests\\EmployeeBonusManagementSystem.UnitTests.csproj": {}
   },
   "projects": {
-    "D:\\DevAcademy\\Final Project\\ProjectFinalVersion\\EmployeeBonusManagementSystem.Application\\EmployeeBonusManagementSystem.Application.csproj": {
+    "C:\\Users\\lmindiashvili\\Desktop\\Employeebonusmanagementsystem\\EmployeeBonusManagementSystem.Application\\EmployeeBonusManagementSystem.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\DevAcademy\\Final Project\\ProjectFinalVersion\\EmployeeBonusManagementSystem.Application\\EmployeeBonusManagementSystem.Application.csproj",
+        "projectUniqueName": "C:\\Users\\lmindiashvili\\Desktop\\Employeebonusmanagementsystem\\EmployeeBonusManagementSystem.Application\\EmployeeBonusManagementSystem.Application.csproj",
         "projectName": "EmployeeBonusManagementSystem.Application",
-        "projectPath": "D:\\DevAcademy\\Final Project\\ProjectFinalVersion\\EmployeeBonusManagementSystem.Application\\EmployeeBonusManagementSystem.Application.csproj",
-        "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-        "outputPath": "D:\\DevAcademy\\Final Project\\ProjectFinalVersion\\EmployeeBonusManagementSystem.Application\\obj\\",
+        "projectPath": "C:\\Users\\lmindiashvili\\Desktop\\Employeebonusmanagementsystem\\EmployeeBonusManagementSystem.Application\\EmployeeBonusManagementSystem.Application.csproj",
+        "packagesPath": "C:\\Users\\lmindiashvili\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\lmindiashvili\\Desktop\\Employeebonusmanagementsystem\\EmployeeBonusManagementSystem.Application\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\lmindiashvili\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -26,14 +22,15 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\DevAcademy\\Final Project\\ProjectFinalVersion\\EmployeeBonusManagementSystem.Domain\\EmployeeBonusManagementSystem.Domain.csproj": {
-                "projectPath": "D:\\DevAcademy\\Final Project\\ProjectFinalVersion\\EmployeeBonusManagementSystem.Domain\\EmployeeBonusManagementSystem.Domain.csproj"
+              "C:\\Users\\lmindiashvili\\Desktop\\Employeebonusmanagementsystem\\EmployeeBonusManagementSystem.Domain\\EmployeeBonusManagementSystem.Domain.csproj": {
+                "projectPath": "C:\\Users\\lmindiashvili\\Desktop\\Employeebonusmanagementsystem\\EmployeeBonusManagementSystem.Domain\\EmployeeBonusManagementSystem.Domain.csproj"
               }
             }
           }
@@ -47,8 +44,7 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "9.0.200"
+        }
       },
       "frameworks": {
         "net8.0": {
@@ -99,25 +95,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.200/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\DevAcademy\\Final Project\\ProjectFinalVersion\\EmployeeBonusManagementSystem.Domain\\EmployeeBonusManagementSystem.Domain.csproj": {
+    "C:\\Users\\lmindiashvili\\Desktop\\Employeebonusmanagementsystem\\EmployeeBonusManagementSystem.Domain\\EmployeeBonusManagementSystem.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\DevAcademy\\Final Project\\ProjectFinalVersion\\EmployeeBonusManagementSystem.Domain\\EmployeeBonusManagementSystem.Domain.csproj",
+        "projectUniqueName": "C:\\Users\\lmindiashvili\\Desktop\\Employeebonusmanagementsystem\\EmployeeBonusManagementSystem.Domain\\EmployeeBonusManagementSystem.Domain.csproj",
         "projectName": "EmployeeBonusManagementSystem.Domain",
-        "projectPath": "D:\\DevAcademy\\Final Project\\ProjectFinalVersion\\EmployeeBonusManagementSystem.Domain\\EmployeeBonusManagementSystem.Domain.csproj",
-        "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-        "outputPath": "D:\\DevAcademy\\Final Project\\ProjectFinalVersion\\EmployeeBonusManagementSystem.Domain\\obj\\",
+        "projectPath": "C:\\Users\\lmindiashvili\\Desktop\\Employeebonusmanagementsystem\\EmployeeBonusManagementSystem.Domain\\EmployeeBonusManagementSystem.Domain.csproj",
+        "packagesPath": "C:\\Users\\lmindiashvili\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\lmindiashvili\\Desktop\\Employeebonusmanagementsystem\\EmployeeBonusManagementSystem.Domain\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\lmindiashvili\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -125,6 +117,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -142,8 +135,7 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "9.0.200"
+        }
       },
       "frameworks": {
         "net8.0": {
@@ -174,25 +166,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.200/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\DevAcademy\\Final Project\\ProjectFinalVersion\\EmployeeBonusManagementSystem.UnitTests\\EmployeeBonusManagementSystem.UnitTests.csproj": {
+    "C:\\Users\\lmindiashvili\\Desktop\\Employeebonusmanagementsystem\\EmployeeBonusManagementSystem.UnitTests\\EmployeeBonusManagementSystem.UnitTests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\DevAcademy\\Final Project\\ProjectFinalVersion\\EmployeeBonusManagementSystem.UnitTests\\EmployeeBonusManagementSystem.UnitTests.csproj",
+        "projectUniqueName": "C:\\Users\\lmindiashvili\\Desktop\\Employeebonusmanagementsystem\\EmployeeBonusManagementSystem.UnitTests\\EmployeeBonusManagementSystem.UnitTests.csproj",
         "projectName": "EmployeeBonusManagementSystem.UnitTests",
-        "projectPath": "D:\\DevAcademy\\Final Project\\ProjectFinalVersion\\EmployeeBonusManagementSystem.UnitTests\\EmployeeBonusManagementSystem.UnitTests.csproj",
-        "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-        "outputPath": "D:\\DevAcademy\\Final Project\\ProjectFinalVersion\\EmployeeBonusManagementSystem.UnitTests\\obj\\",
+        "projectPath": "C:\\Users\\lmindiashvili\\Desktop\\Employeebonusmanagementsystem\\EmployeeBonusManagementSystem.UnitTests\\EmployeeBonusManagementSystem.UnitTests.csproj",
+        "packagesPath": "C:\\Users\\lmindiashvili\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\lmindiashvili\\Desktop\\Employeebonusmanagementsystem\\EmployeeBonusManagementSystem.UnitTests\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\lmindiashvili\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -200,14 +188,15 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\DevAcademy\\Final Project\\ProjectFinalVersion\\EmployeeBonusManagementSystem.Application\\EmployeeBonusManagementSystem.Application.csproj": {
-                "projectPath": "D:\\DevAcademy\\Final Project\\ProjectFinalVersion\\EmployeeBonusManagementSystem.Application\\EmployeeBonusManagementSystem.Application.csproj"
+              "C:\\Users\\lmindiashvili\\Desktop\\Employeebonusmanagementsystem\\EmployeeBonusManagementSystem.Application\\EmployeeBonusManagementSystem.Application.csproj": {
+                "projectPath": "C:\\Users\\lmindiashvili\\Desktop\\Employeebonusmanagementsystem\\EmployeeBonusManagementSystem.Application\\EmployeeBonusManagementSystem.Application.csproj"
               }
             }
           }
@@ -221,8 +210,7 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "9.0.200"
+        }
       },
       "frameworks": {
         "net8.0": {
@@ -279,7 +267,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.200/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

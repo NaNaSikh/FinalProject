@@ -10,7 +10,7 @@ namespace EmployeeBonusManagementSystem.UnitTests
     {
         private readonly IBonusRepository _bonusRepository;
         private readonly IEmployeeRepository _employeeRepository;
-        private readonly AddBonusesQueryHandler _handler;
+        private readonly AddBonusesCommandHandler _handler;
         private readonly IUnitOfWork _unitOfWork;
 
 
@@ -19,7 +19,7 @@ namespace EmployeeBonusManagementSystem.UnitTests
             _bonusRepository = A.Fake<IBonusRepository>();
             _employeeRepository = A.Fake<IEmployeeRepository>();
             _unitOfWork = A.Fake<IUnitOfWork>();
-            _handler = new AddBonusesQueryHandler(_unitOfWork);
+            _handler = new AddBonusesCommandHandler(_unitOfWork);
             A.CallTo(() => _unitOfWork.EmployeeRepository).Returns(_employeeRepository);
             A.CallTo(() => _unitOfWork.BonusRepository).Returns(_bonusRepository);
         }
@@ -28,7 +28,7 @@ namespace EmployeeBonusManagementSystem.UnitTests
         public async Task AddBonus_employeeNotFound_ThrowsException()
         {
 
-            var query = new AddBonusesQuery(
+            var query = new AddBonusesCommand(
                 "12345678901", 500);
 
             // თანამშრომელი არ არსებობს
@@ -44,7 +44,7 @@ namespace EmployeeBonusManagementSystem.UnitTests
         [Fact]
         public async Task AddBonus_ValidEmployee_AddsBonusSuccessfully()
         {
-            var query = new AddBonusesQuery("12345678901", 1000);
+            var query = new AddBonusesCommand("12345678901", 1000);
 
             A.CallTo(() => _employeeRepository.GetEmployeeExistsByPersonalNumberAsync(A<string>._))
                 .Returns(Task.FromResult<(bool, int)>((true, 5)));
