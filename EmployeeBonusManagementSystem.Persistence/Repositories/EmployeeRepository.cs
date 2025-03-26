@@ -125,8 +125,21 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories.Implementations
 							INSERT INTO EmployeeRole (EmployeeId, RoleId)
 							VALUES (@EmployeeId, @RoleId)";
 
-				  await _unitOfWork.Connection.ExecuteAsync(roleQuery, new { EmployeeId = employeeId, RoleId = roleId }, transaction);
-				
+				await _unitOfWork.Connection.ExecuteAsync(roleQuery, new { EmployeeId = employeeId, RoleId = roleId }, transaction);
+				var recommenderQuery = @"
+									INSERT INTO RecommenderEmployees (EmployeeId, RecommenderEmployeeId , AssignDate)
+									VALUES (@EmployeeId, @RecommenderEmployeeId ,  @AssignDate);";
+
+				await _unitOfWork.Connection.ExecuteAsync(recommenderQuery, new { EmployeeId = employeeId,
+					RecommenderEmployeeId = employee.RecommenderEmployeeId , AssignDate = employee.CreateDate }, transaction);
+
+				var departmentQuery = @"
+									   INSERT INTO EmployeeDepartments (EmployeeId, DepartmentId , AssignDate , IsActive)
+									   VALUES (@EmployeeId, @DepartmentId ,  @AssignDate , @IsActive);";
+
+				await _unitOfWork.Connection.ExecuteAsync(departmentQuery, new { EmployeeId = employeeId,
+					DepartmentId = employee.DepartmentId, AssignDate = employee.CreateDate  , IsActive = 1}, transaction);
+
 			}
 			catch (Exception ex)
 			{
