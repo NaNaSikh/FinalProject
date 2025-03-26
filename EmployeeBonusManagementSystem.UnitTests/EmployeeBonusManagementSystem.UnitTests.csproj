@@ -31,8 +31,4 @@
     <Using Include="Xunit" />
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="dotnet test &quot;$(ProjectDir)EmployeeBonusManagementSystem.UnitTests.csproj&quot;" />
-  </Target>
-
 </Project>
