@@ -21,8 +21,8 @@ public class UpsertBonusConfigurationHandler(
                 request.MaxBonusPercentage,
                 request.MinBonusPercentage,
                 request.MaxRecommendationLevel,
-                request.RecommendationBonusRate,
-                request.CreateByUserId);
+                request.RecommendationBonusRate);
+            //request.CreateByUserId);
 
             await unitOfWork.CommitAsync();
             return result;

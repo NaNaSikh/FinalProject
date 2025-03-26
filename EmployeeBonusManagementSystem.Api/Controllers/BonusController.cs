@@ -1,7 +1,6 @@
 ﻿using EmployeeBonusManagementSystem.Application.Features.Bonuses.Commands.AddBonuses;
 using EmployeeBonusManagementSystem.Application.Features.Bonuses.Commands.UpdateOrInsertBonusConfiguration;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EmployeeBonusManagementSystem.Api.Controllers;
@@ -18,7 +17,7 @@ public class BonusController : ControllerBase
     }
 
 
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [HttpPost("Bonus")]
     public async Task<ActionResult<List<AddBonusesDto>>> AddBonus([FromBody] AddBonusesCommand request)
     {
@@ -27,7 +26,7 @@ public class BonusController : ControllerBase
     }
 
 
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [HttpPost("UpsertBonusConfiguration")]
     public async Task<ActionResult<List<UpsertBonusConfigurationDto>>> UpsertBonusConfiguration([FromBody] UpsertBonusConfigurationCommand request)
     {

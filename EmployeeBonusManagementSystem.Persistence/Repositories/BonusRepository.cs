@@ -21,9 +21,20 @@ public class BonusRepository(
     {
         try
         {
-			var bonusesResult = await sqlQueryRepository.LoadMultipleData<AddBonusesDto, dynamic>(
+            //{
+            //    var userIdClaim = httpContextAccessor.HttpContext?.User?.FindFirst("Id");
+
+            //    if (userIdClaim == null)
+            //    {
+            //        throw new UnauthorizedAccessException("User ID not found in token.");
+            //    }
+
+            //    int userId = int.Parse(userIdClaim.Value);
+
+
+            var bonusesResult = await sqlQueryRepository.LoadMultipleData<AddBonusesDto, dynamic>(
             "AddBonuses",
-            new { EmployeeId = bonus.EmployeeId, BonusAmount = bonus.Amount , CreateByUserId = userId },
+            new { EmployeeId = bonus.EmployeeId, BonusAmount = bonus.Amount, /*CreateByUser = userId*/ },
             configuration.GetConnectionString("DefaultConnection"),
             CommandType.StoredProcedure);
 
@@ -42,8 +53,8 @@ public class BonusRepository(
     int? MaxBonusPercentage,
     int? MinBonusPercentage,
     int? MaxRecommendationLevel,
-    int? RecommendationBonusRate,
-    int CreateByUserId)
+    int? RecommendationBonusRate
+    /*int CreateByUserId*/)
     {
         try
         {
@@ -56,7 +67,7 @@ public class BonusRepository(
                     MinBonusPercentage,
                     MaxRecommendationLevel,
                     RecommendationBonusRate,
-                    CreateByUserId
+                    //CreateByUserId
                 },
                 configuration.GetConnectionString("DefaultConnection"),
                 CommandType.StoredProcedure);

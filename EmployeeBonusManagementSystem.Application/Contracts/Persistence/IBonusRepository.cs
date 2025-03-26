@@ -13,8 +13,8 @@ public interface IBonusRepository
     int? MaxBonusPercentage,
     int? MinBonusPercentage,
     int? MaxRecommendationLevel,
-    int? RecommendationBonusRate,
-    int CreateByUserId);
+    int? RecommendationBonusRate
+    /*int CreateByUserId*/);
 
 
 }
