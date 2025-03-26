@@ -84,13 +84,13 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("User", policy =>
     {
         policy.RequireAuthenticatedUser();
-        policy.RequireRole("User"); // Both "User" and "Admin" can access
+        policy.RequireRole("User" , "Admin"); 
     });
 
     options.AddPolicy("Admin", policy =>
     {
         policy.RequireAuthenticatedUser();
-        policy.RequireRole("Admin"); // Only "Admin" can access
+        policy.RequireRole("Admin"); 
     });
 });
 
