@@ -13,5 +13,5 @@ EmployeeBonusManagementSystem.Infrastructure/bin/
 EmployeeBonusManagementSystem.Infrastructure/obj/
 EmployeeBonusManagementSystem.Application/bin/
 EmployeeBonusManagementSystem.Application/obj/
-EmployeeBonusManagementSystem.UnitTest/bin/
-EmployeeBonusManagementSystem.UnitTest/obj/
+EmployeeBonusManagementSystem.UnitTests/bin/
+EmployeeBonusManagementSystem.UnitTests/obj/
