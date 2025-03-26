@@ -8,17 +8,16 @@ using System.Data;
 public class UnitOfWork : IUnitOfWork
 {
     private readonly ApplicationDbContext _context;
-    private readonly IDbConnectionFactory _connectionFactory;
     private IDbConnection _connection;
     private IDbTransaction _transaction;
     private bool _disposed;
     private readonly IServiceProvider _serviceProvider;
 
-    public UnitOfWork(ApplicationDbContext context, IDbConnectionFactory connectionFactory, IServiceProvider serviceProvider)
+
+    public UnitOfWork(ApplicationDbContext context, IDbConnection connection, IServiceProvider serviceProvider)
     {
         _context = context;
-        _connectionFactory = connectionFactory;
-        _connection = _connectionFactory.CreateConnection();
+        _connection = connection;
         _connection.Open();
         _serviceProvider = serviceProvider;
     }
