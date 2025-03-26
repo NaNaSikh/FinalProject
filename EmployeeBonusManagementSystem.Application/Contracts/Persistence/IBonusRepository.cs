@@ -6,9 +6,9 @@ namespace EmployeeBonusManagementSystem.Application.Contracts.Persistence;
 
 public interface IBonusRepository
 {
-	Task<List<AddBonusesDto>> AddBonusAsync(BonusEntity bonus, int userId);
+    Task<List<AddBonusesDto>> AddBonusAsync(BonusEntity bonus, int userId);
 
-	Task<List<UpsertBonusConfigurationDto>> UpdateOrInsertBonusConfigurationAsync(
+    Task<List<UpsertBonusConfigurationDto>> UpdateOrInsertBonusConfigurationAsync(
     decimal? MaxBonusAmount,
     int? MaxBonusPercentage,
     int? MinBonusPercentage,

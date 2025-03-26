@@ -1,10 +1,12 @@
-﻿using EmployeeBonusManagementSystem.Persistence;
+﻿using EmployeeBonusManagementSystem.Application.Contracts.Persistence;
+using EmployeeBonusManagementSystem.Persistence;
 using MediatR;
 
 namespace EmployeeBonusManagementSystem.Application.Features.Bonuses.Commands.UpdateOrInsertBonusConfiguration;
 
 public class UpsertBonusConfigurationHandler(
-    IUnitOfWork unitOfWork)
+    IUnitOfWork unitOfWork,
+    IUserContextService userContextService)
     : IRequestHandler<UpsertBonusConfigurationCommand, List<UpsertBonusConfigurationDto>>
 {
     public async Task<List<UpsertBonusConfigurationDto>> Handle(
@@ -16,13 +18,16 @@ public class UpsertBonusConfigurationHandler(
             await unitOfWork.OpenAsync();
             await unitOfWork.BeginTransactionAsync();
 
+            var userId = userContextService.GetUserId();
+
+
             var result = await unitOfWork.BonusRepository.UpdateOrInsertBonusConfigurationAsync(
                 request.MaxBonusAmount,
                 request.MaxBonusPercentage,
                 request.MinBonusPercentage,
                 request.MaxRecommendationLevel,
                 request.RecommendationBonusRate,
-                request.CreateByUserId);
+                userId);
 
             await unitOfWork.CommitAsync();
             return result;

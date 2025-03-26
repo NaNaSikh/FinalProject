@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EmployeeBonusManagementSystem.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250325124239_logs")]
-    partial class logs
+    [Migration("20250326091358_AddResponseToLogss")]
+    partial class AddResponseToLogss
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,8 +33,8 @@ namespace EmployeeBonusManagementSystem.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<double>("ActualBonusPercent")
-                        .HasColumnType("float");
+                    b.Property<int>("CreateByUserId")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("MaxBonusAmount")
                         .HasColumnType("decimal(18,2)");
@@ -53,7 +53,7 @@ namespace EmployeeBonusManagementSystem.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("BonusConfigurations");
+                    b.ToTable("BonusConfigurations", (string)null);
                 });
 
             modelBuilder.Entity("EmployeeBonusManagementSystem.Domain.Entities.BonusEntity", b =>
@@ -332,7 +332,7 @@ namespace EmployeeBonusManagementSystem.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Responce")
+                    b.Property<string>("Response")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

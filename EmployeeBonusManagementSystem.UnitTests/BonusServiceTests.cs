@@ -10,36 +10,39 @@ namespace EmployeeBonusManagementSystem.UnitTests
     {
         private readonly IBonusRepository _bonusRepository;
         private readonly IEmployeeRepository _employeeRepository;
-        private readonly AddBonusesCommandHandler _handler;
         private readonly IUnitOfWork _unitOfWork;
-
+        private readonly IUserContextService _userContextService;
+        private readonly ILoggingRepository _loggingRepository;
+        private readonly AddBonusesQueryHandler _handler;
 
         public BonusServiceTests()
         {
             _bonusRepository = A.Fake<IBonusRepository>();
             _employeeRepository = A.Fake<IEmployeeRepository>();
             _unitOfWork = A.Fake<IUnitOfWork>();
-            _handler = new AddBonusesCommandHandler(_unitOfWork);
+            _userContextService = A.Fake<IUserContextService>();
+            _loggingRepository = A.Fake<ILoggingRepository>();
+
+            _handler = new AddBonusesQueryHandler(_unitOfWork, _userContextService, _loggingRepository);
+
             A.CallTo(() => _unitOfWork.EmployeeRepository).Returns(_employeeRepository);
             A.CallTo(() => _unitOfWork.BonusRepository).Returns(_bonusRepository);
+
+            A.CallTo(() => _userContextService.GetUserId()).Returns(2);
         }
 
         [Fact]
         public async Task AddBonus_employeeNotFound_ThrowsException()
         {
-
-            var query = new AddBonusesCommand(
-                "12345678901", 500);
+            var query = new AddBonusesCommand("12345678901", 500);
 
             // თანამშრომელი არ არსებობს
             A.CallTo(() => _employeeRepository.GetEmployeeExistsByPersonalNumberAsync(A<string>._))
                 .Returns(Task.FromResult<(bool, int)>((false, 0)));
 
             await Assert.ThrowsAsync<Exception>(async () =>
-               await _handler.Handle(query, CancellationToken.None));
+                await _handler.Handle(query, CancellationToken.None));
         }
-
-
 
         [Fact]
         public async Task AddBonus_ValidEmployee_AddsBonusSuccessfully()
@@ -49,8 +52,15 @@ namespace EmployeeBonusManagementSystem.UnitTests
             A.CallTo(() => _employeeRepository.GetEmployeeExistsByPersonalNumberAsync(A<string>._))
                 .Returns(Task.FromResult<(bool, int)>((true, 5)));
 
-            A.CallTo(() => _bonusRepository.AddBonusAsync(A<BonusEntity>._))
-               .Returns(Task.FromResult(new List<AddBonusesDto>()));
+            A.CallTo(() => _bonusRepository.AddBonusAsync(A<BonusEntity>._, A<int>._))
+               .Returns(Task.FromResult(new List<AddBonusesDto>
+               {
+                   new AddBonusesDto
+                   {
+                       EmployeeId = 5,
+                       Amount = 1000
+                   }
+               }));
 
             var result = await _handler.Handle(query, CancellationToken.None);
 
@@ -59,8 +69,9 @@ namespace EmployeeBonusManagementSystem.UnitTests
             Assert.Equal(5, result[0].EmployeeId);
             Assert.Equal(1000, result[0].Amount);
 
-            A.CallTo(() => _bonusRepository.AddBonusAsync(A<BonusEntity>._))
+            A.CallTo(() => _bonusRepository.AddBonusAsync(A<BonusEntity>._, A<int>._))
                 .MustHaveHappenedOnceExactly();
         }
     }
 }
+

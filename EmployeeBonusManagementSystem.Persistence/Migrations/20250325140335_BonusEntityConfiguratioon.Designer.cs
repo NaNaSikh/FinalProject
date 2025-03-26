@@ -4,6 +4,7 @@ using EmployeeBonusManagementSystem.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EmployeeBonusManagementSystem.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250325140335_BonusEntityConfiguratioon")]
+    partial class BonusEntityConfiguratioon
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,9 +32,6 @@ namespace EmployeeBonusManagementSystem.Persistence.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CreateByUserId")
-                        .HasColumnType("int");
 
                     b.Property<decimal>("MaxBonusAmount")
                         .HasColumnType("decimal(18,2)");
@@ -310,6 +310,9 @@ namespace EmployeeBonusManagementSystem.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
                     b.ToTable("ErrorLogs", (string)null);
                 });
 
@@ -325,11 +328,7 @@ namespace EmployeeBonusManagementSystem.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Request")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Response")
+                    b.Property<string>("Data")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -340,6 +339,9 @@ namespace EmployeeBonusManagementSystem.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Logs", (string)null);
                 });
@@ -461,6 +463,28 @@ namespace EmployeeBonusManagementSystem.Persistence.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("EmployeeBonusManagementSystem.Domain.Entities.ErrorLogsEntity", b =>
+                {
+                    b.HasOne("EmployeeBonusManagementSystem.Domain.Entities.EmployeeEntity", "Employee")
+                        .WithOne("ErrorLogs")
+                        .HasForeignKey("EmployeeBonusManagementSystem.Domain.Entities.ErrorLogsEntity", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("EmployeeBonusManagementSystem.Domain.Entities.LogsEntity", b =>
+                {
+                    b.HasOne("EmployeeBonusManagementSystem.Domain.Entities.EmployeeEntity", "Employee")
+                        .WithOne("Logs")
+                        .HasForeignKey("EmployeeBonusManagementSystem.Domain.Entities.LogsEntity", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+                });
+
             modelBuilder.Entity("EmployeeBonusManagementSystem.Domain.Entities.RecommenderEmployeeEntity", b =>
                 {
                     b.HasOne("EmployeeBonusManagementSystem.Domain.Entities.EmployeeEntity", null)
@@ -473,6 +497,15 @@ namespace EmployeeBonusManagementSystem.Persistence.Migrations
                         .WithMany()
                         .HasForeignKey("RecommenderEmployeeId")
                         .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("EmployeeBonusManagementSystem.Domain.Entities.EmployeeEntity", b =>
+                {
+                    b.Navigation("ErrorLogs")
+                        .IsRequired();
+
+                    b.Navigation("Logs")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618
