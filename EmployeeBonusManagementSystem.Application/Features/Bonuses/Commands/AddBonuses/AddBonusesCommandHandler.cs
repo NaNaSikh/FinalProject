@@ -1,5 +1,4 @@
-﻿using Azure;
-using EmployeeBonusManagementSystem.Application.Contracts.Persistence;
+﻿using EmployeeBonusManagementSystem.Application.Contracts.Persistence;
 using EmployeeBonusManagementSystem.Domain.Entities;
 using EmployeeBonusManagementSystem.Persistence;
 using MediatR;
@@ -7,8 +6,8 @@ using System.Text.Json;
 
 namespace EmployeeBonusManagementSystem.Application.Features.Bonuses.Commands.AddBonuses;
 
-public class AddBonusesQueryHandler( IUnitOfWork unitOfWork , IUserContextService userContextService ,ILoggingRepository loggingRepository) 
-	: IRequestHandler<AddBonusesCommand, List<AddBonusesDto>>
+public class AddBonusesQueryHandler(IUnitOfWork unitOfWork, IUserContextService userContextService, ILoggingRepository loggingRepository)
+    : IRequestHandler<AddBonusesCommand, List<AddBonusesDto>>
 {
     public async Task<List<AddBonusesDto>> Handle(
         AddBonusesCommand request,
@@ -33,58 +32,24 @@ public class AddBonusesQueryHandler( IUnitOfWork unitOfWork , IUserContextServic
             {
                 EmployeeId = employeeExists.Item2,
                 Amount = request.BonusAmount
-            } , userId);
+            }, userId);
 
-			var logEntity = new LogsEntity
-			{
-				TimeStamp = DateTime.UtcNow,
-				UserId = userId,
-				ActionType = "AddBonus",
-				Request = JsonSerializer.Serialize(request),
-				Response = JsonSerializer.Serialize(bonuses)
+            var logEntity = new LogsEntity
+            {
+                TimeStamp = DateTime.UtcNow,
+                UserId = userId,
+                ActionType = "AddBonus",
+                Request = JsonSerializer.Serialize(request),
+                Response = JsonSerializer.Serialize(bonuses)
 
-			};
-			await loggingRepository.LogInformationAsync(logEntity);
+            };
+            await loggingRepository.LogInformationAsync(logEntity);
 
-			//to test 
-			//throw new Exception("Test Exception - Bonus module error!");
 
-			await unitOfWork.CommitAsync();
+            await unitOfWork.CommitAsync();
             return bonuses;
         }
 
-        //    var reason = $"{DateTime.UtcNow:MMMM} თვის ბონუსის ჩარიცხვა";
-
-        //    var mainBonus = new BonusEntity
-        //    {
-        //        EmployeeId = employeeExists.Item2,
-        //        Amount = request.BonusAmount,
-        //        Reason = reason,
-        //        CreateDate = DateTime.UtcNow,
-        //        IsRecommenderBonus = false,
-        //        RecommendationLevel = 0,
-        //        //CreateByUserId = adminUserId, ეს ჯერ არ მაქვს
-        //    };
-        //    //int adminUserId = currentUserService.GetUserId(); ეს JWT
-
-        //    await unitOfWork.BonusRepository.AddBonusAsync(mainBonus);
-        //    await unitOfWork.CommitAsync();
-
-        //    var bonuses = new List<AddBonusesDto>
-        //    {
-        //        new()
-        //        {
-        //            EmployeeId = mainBonus.EmployeeId,
-        //            Amount = mainBonus.Amount,
-        //            Reason = mainBonus.Reason,
-        //            CreateDate = mainBonus.CreateDate,
-        //            RecommendationLevel = mainBonus.RecommendationLevel,
-        //            IsRecommenderBonus = mainBonus.IsRecommenderBonus
-        //        }
-        //    };
-
-        //    return bonuses;
-        //}
         catch (Exception ex)
         {
             await unitOfWork.RollbackAsync();
@@ -92,15 +57,15 @@ public class AddBonusesQueryHandler( IUnitOfWork unitOfWork , IUserContextServic
 
             var errorLog = new ErrorLogsEntity
             {
-	            TimeStamp = DateTime.UtcNow,
-	            UserId = userContextService.GetUserId(),
-	            Level = "Error",
-	            Message = "An error occurred while adding a Bonus.",
-	            Exception = ex.ToString()
+                TimeStamp = DateTime.UtcNow,
+                UserId = userContextService.GetUserId(),
+                Level = "Error",
+                Message = "An error occurred while adding a Bonus.",
+                Exception = ex.ToString()
             };
 
             await loggingRepository.LogErrorInformationAsync(errorLog);
-			throw new Exception(ex.Message);
+            throw new Exception(ex.Message);
         }
         finally
         {

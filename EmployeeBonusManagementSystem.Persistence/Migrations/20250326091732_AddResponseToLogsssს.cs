@@ -5,7 +5,7 @@
 namespace EmployeeBonusManagementSystem.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class logs3 : Migration
+    public partial class AddResponseToLogsssს : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

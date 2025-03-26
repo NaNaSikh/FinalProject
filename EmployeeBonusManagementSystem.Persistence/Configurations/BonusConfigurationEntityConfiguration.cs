@@ -27,5 +27,8 @@ public class BonusConfigurationEntityConfiguration : IEntityTypeConfiguration<Bo
 
         builder.Property(b => b.RecommendationBonusRate)
             .IsRequired();
+
+        builder.Property(b => b.CreateByUserId)
+          .IsRequired();
     }
 }

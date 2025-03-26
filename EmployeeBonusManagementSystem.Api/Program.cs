@@ -1,7 +1,9 @@
 ﻿using EmployeeBonusManagementSystem.Application;
+using EmployeeBonusManagementSystem.Application.Contracts.Persistence;
 using EmployeeBonusManagementSystem.Application.Features.Employees.Commands.AddEmployee;
 using EmployeeBonusManagementSystem.Application.Mapping;
 using EmployeeBonusManagementSystem.Persistence;
+using EmployeeBonusManagementSystem.Persistence.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -51,19 +53,20 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-    builder.Services.AddLogging();
+builder.Services.AddLogging();
 
 
-	builder.Services.AddAutoMapper(typeof(EmployeeProfile));
-	builder.Services.AddAutoMapper(typeof(BonusProfile));
+builder.Services.AddAutoMapper(typeof(EmployeeProfile));
+builder.Services.AddAutoMapper(typeof(BonusProfile));
 
-	builder.Services.AddHttpContextAccessor();
+builder.Services.AddHttpContextAccessor();
 
-	builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(AddEmployeeCommand).Assembly));
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(AddEmployeeCommand).Assembly));
 
 
 builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddApplication();
+builder.Services.AddScoped<IUserContextService, UserContextService>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -96,10 +99,11 @@ builder.Services.AddAuthorization(options =>
 
 
 
-	
+
 
 // Configure the HTTP request pipeline.
 var app = builder.Build();
+
 
 //if (app.Environment.IsDevelopment())
 //{

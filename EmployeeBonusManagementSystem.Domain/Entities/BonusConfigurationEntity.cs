@@ -11,5 +11,6 @@ public class BonusConfigurationEntity : BaseEntity
     //public double ActualBonusPercent { get; set; }
     public int MaxRecommendationLevel { get; set; }
     public double RecommendationBonusRate { get; set; }
+    public int CreateByUserId { get; set; }
 
 }

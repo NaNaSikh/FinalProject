@@ -7,8 +7,7 @@ public record UpsertBonusConfigurationCommand(
     int? MaxBonusPercentage,
     int? MinBonusPercentage,
     int? MaxRecommendationLevel,
-    int? RecommendationBonusRate
-   /* int CreateByUserId*/)
+    int? RecommendationBonusRate)
     : IRequest<List<UpsertBonusConfigurationDto>>;
 
 
