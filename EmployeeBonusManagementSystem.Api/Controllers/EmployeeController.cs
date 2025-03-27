@@ -1,6 +1,5 @@
 ﻿using EmployeeBonusManagementSystem.Application.Features.Employees.Commands.AddEmployee;
 using EmployeeBonusManagementSystem.Application.Features.Employees.Commands.ChaingePassword;
-using EmployeeBonusManagementSystem.Application.Features.Employees.Common;
 using EmployeeBonusManagementSystem.Application.Features.Employees.Queries;
 using EmployeeBonusManagementSystem.Application.Features.Employees.Queries.GetEmployeeBonus;
 using EmployeeBonusManagementSystem.Application.Features.Employees.Queries.GetEmployeeRecomendator;

@@ -6,7 +6,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using EmployeeBonusManagementSystem.Application.Contracts.Persistence;
-using EmployeeBonusManagementSystem.Application.Features.Employees.Common;
 using EmployeeBonusManagementSystem.Application.Features.Employees.Queries;
 using MediatR;
 

@@ -1,7 +1,7 @@
 ﻿using EmployeeBonusManagementSystem.Domain.Entities;
 using System;
 
-namespace EmployeeBonusManagementSystem.Application.Features.Employees.Common
+namespace EmployeeBonusManagementSystem.Application.Features.Employees.Commands.AddEmployee
 {
     public class EmployeeDto
     {
@@ -16,6 +16,6 @@ namespace EmployeeBonusManagementSystem.Application.Features.Employees.Common
         public string UserName { get; set; }
         public int DepartmentId { get; set; }
         public int? RecommenderEmployeeId { get; set; }
-        public String Role { get; set; }
+        public string Role { get; set; }
     }
 }

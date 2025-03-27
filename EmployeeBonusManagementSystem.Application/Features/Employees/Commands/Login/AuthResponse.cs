@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EmployeeBonusManagementSystem.Application.Features.Employees.Common
+namespace EmployeeBonusManagementSystem.Application.Features.Employees.Commands.Login
 {
     public class AuthResponse
     {

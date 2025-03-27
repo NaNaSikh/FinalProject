@@ -3,122 +3,139 @@ using EmployeeBonusManagementSystem.Application.Contracts.Persistence.Common;
 using EmployeeBonusManagementSystem.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Data;
+using System.Threading.Tasks;
 
 public class UnitOfWork : IUnitOfWork
 {
-    private readonly ApplicationDbContext _context;
-    private readonly IDbConnectionFactory _connectionFactory;
-    private IDbConnection _connection;
-    private IDbTransaction _transaction;
-    private bool _disposed;
-    private readonly IServiceProvider _serviceProvider;
+	private readonly ApplicationDbContext _context;
+	private readonly IDbConnection _connection;
+	private IDbTransaction _transaction;
+	private bool _disposed;
+	private readonly IServiceProvider _serviceProvider;
 
-    public UnitOfWork(ApplicationDbContext context, IDbConnectionFactory connectionFactory, IServiceProvider serviceProvider)
-    {
-        _context = context;
-        _connectionFactory = connectionFactory;
-        _connection = _connectionFactory.CreateConnection();
-        _connection.Open();
-        _serviceProvider = serviceProvider;
-    }
+	public UnitOfWork(ApplicationDbContext context, IServiceProvider serviceProvider)
+	{
+		_context = context ?? throw new ArgumentNullException(nameof(context));
+		_serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
 
-    public IDbTransaction Transaction => _transaction;
+		// Initialize connection from EF Core
+		_connection = _context.Database.GetDbConnection();
+		_connection.Open();
+	}
 
-    public ISqlCommandRepository SqlCommandRepository => _serviceProvider.GetService<ISqlCommandRepository>();
-    public ISqlQueryRepository SqlQueryRepository => _serviceProvider.GetService<ISqlQueryRepository>();
-    public IBonusRepository BonusRepository => _serviceProvider.GetService<IBonusRepository>();
-    public IEmployeeRepository EmployeeRepository => _serviceProvider.GetService<IEmployeeRepository>();
-    public IReportRepository ReportRepository => _serviceProvider.GetService<IReportRepository>();
+	public IDbTransaction Transaction => _transaction;
 
-    public IDbConnection Connection => _connection;
+	public ISqlCommandRepository SqlCommandRepository => _serviceProvider.GetRequiredService<ISqlCommandRepository>();
+	public ISqlQueryRepository SqlQueryRepository => _serviceProvider.GetRequiredService<ISqlQueryRepository>();
+	public IBonusRepository BonusRepository => _serviceProvider.GetRequiredService<IBonusRepository>();
+	public IEmployeeRepository EmployeeRepository => _serviceProvider.GetRequiredService<IEmployeeRepository>();
+	public IReportRepository ReportRepository => _serviceProvider.GetRequiredService<IReportRepository>();
 
-    // Begin Transaction (private for internal management)
-    public IDbTransaction BeginTransaction()
-    {
-        if (_transaction == null)
-        {
-            _transaction = _connection.BeginTransaction();
-        }
+	public IDbConnection Connection => _connection;
 
-        return _transaction;
-    }
+	// Begin Transaction
+	public IDbTransaction BeginTransaction()
+	{
+		if (_transaction == null)
+		{
+			_transaction = _connection.BeginTransaction();
+		}
 
-    public async Task BeginTransactionAsync()
-    {
-        await _context.Database.BeginTransactionAsync();
-    }
+		return _transaction;
+	}
 
-    // Commit Transaction (controlled within UnitOfWork)
-    public void Commit()
-    {
-        _transaction?.Commit();
-        _transaction?.Dispose();
-        _transaction = null;
-    }
+	public async Task BeginTransactionAsync()
+	{
+		if (_transaction == null)
+		{
+			 await _context.Database.BeginTransactionAsync();
+		}
+	}
 
-    // Commit async
-    public async Task CommitAsync()
-    {
-        await _context.Database.CommitTransactionAsync();
-    }
+	// Commit Transaction
+	public void Commit()
+	{
+		_transaction?.Commit();
+		_transaction?.Dispose();
+		_transaction = null;
+	}
 
-    // Rollback Transaction (controlled within UnitOfWork)
-    public void Rollback()
-    {
-        _transaction?.Rollback();
-        _transaction?.Dispose();
-        _transaction = null;
-    }
+	public async Task CommitAsync()
+	{
+		if (_transaction != null)
+		{
+			await _context.Database.CommitTransactionAsync();
+			_transaction.Dispose();
+			_transaction = null;
+		}
+	}
 
-    public async Task RollbackAsync()
-    {
-        await _context.Database.RollbackTransactionAsync();
-    }
+	// Rollback Transaction
+	public void Rollback()
+	{
+		_transaction?.Rollback();
+		_transaction?.Dispose();
+		_transaction = null;
+	}
 
-    public async Task CloseAsync()
-    {
-        if (await _context.Database.CanConnectAsync())
-            await _context.Database.CloseConnectionAsync();
-    }
+	public async Task RollbackAsync()
+	{
+		if (_transaction != null)
+		{
+			await _context.Database.RollbackTransactionAsync();
+			_transaction.Dispose();
+			_transaction = null;
+		}
+	}
 
-    public async Task OpenAsync()
-    {
-        if (await _context.Database.CanConnectAsync())
-            await _context.Database.OpenConnectionAsync();
-    }
+	// Open and Close DB Connection
+	public async Task OpenAsync()
+	{
+		if (_connection.State != ConnectionState.Open)
+		{
+			await _context.Database.OpenConnectionAsync();
+		}
+	}
 
-    public async Task<int> CompleteAsync()
-    {
-        try
-        {
-            Commit(); // Ensure commit is done within the UnitOfWork
-            await CommitAsync();
-            return 1;
-        }
-        catch (Exception)
-        {
-            Rollback(); // Rollback if something goes wrong
-            await RollbackAsync();
-            return 0;
-        }
-        finally
-        {
-            Dispose();
-        }
-    }
+	public async Task CloseAsync()
+	{
+		if (_connection.State != ConnectionState.Closed)
+		{
+			await _context.Database.CloseConnectionAsync();
+		}
+	}
 
-    public void Dispose()
-    {
-        if (!_disposed)
-        {
-            _transaction?.Dispose();
-            if (_connection?.State == ConnectionState.Open)
-            {
-                _connection.Close();
-            }
-            _connection?.Dispose();
-            _disposed = true;
-        }
-    }
+	// Save Changes and Commit
+	public async Task<int> CompleteAsync()
+	{
+		try
+		{
+			int result = await _context.SaveChangesAsync();
+			await CommitAsync();
+			return result;
+		}
+		catch (Exception)
+		{
+			await RollbackAsync();
+			throw;
+		}
+	}
+
+	public void Dispose()
+	{
+		if (!_disposed)
+		{
+			_transaction?.Dispose();
+
+			if (_connection.State == ConnectionState.Open)
+			{
+				_connection.Close();
+			}
+
+			_connection.Dispose();
+			_disposed = true;
+		}
+	}
 }

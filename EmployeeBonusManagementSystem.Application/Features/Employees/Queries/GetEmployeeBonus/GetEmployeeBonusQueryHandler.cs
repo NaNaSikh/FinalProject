@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using EmployeeBonusManagementSystem.Application.Contracts.Persistence;
-using EmployeeBonusManagementSystem.Application.Features.Employees.Common;
 using MediatR;
 using System;
 using System.Collections.Generic;

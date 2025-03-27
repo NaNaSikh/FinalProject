@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
-using EmployeeBonusManagementSystem.Application.Features.Employees.Common;
 using EmployeeBonusManagementSystem.Application.Features.Employees.Queries.GetEmployeeSalary;
 using EmployeeBonusManagementSystem.Domain.Entities;
 
 namespace EmployeeBonusManagementSystem.Application.Mapping
 {
 	using AutoMapper;
+	using EmployeeBonusManagementSystem.Application.Features.Employees.Commands.AddEmployee;
 	using EmployeeBonusManagementSystem.Application.Features.Employees.Queries.GetAllEmployees;
 	using EmployeeBonusManagementSystem.Application.Features.Employees.Queries.GetEmployeeRecomendator;
 

@@ -1,5 +1,4 @@
-﻿using EmployeeBonusManagementSystem.Application.Features.Employees.Common;
-using MediatR;
+﻿using MediatR;
 
 namespace EmployeeBonusManagementSystem.Application.Features.Employees.Commands.AddEmployee
 {

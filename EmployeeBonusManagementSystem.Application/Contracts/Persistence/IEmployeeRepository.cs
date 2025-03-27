@@ -16,10 +16,11 @@ public interface IEmployeeRepository
 	Task<IEnumerable<EmployeeEntity>> GetEmployeeSalary(int Id);
 	Task<IEnumerable<BonusEntity>> GetEmployeeBonus(int Id);
 	Task<IEnumerable<EmployeeEntity>> GetEmployeeRecomender(int Id);
-
     Task<(bool, int)> GetEmployeeExistsByPersonalNumberAsync(string personalNumber);
     Task<PasswordVerificationResult> CheckPasswordByIdAsync(int id, string enteredPassword);
 	Task UpdateEmployeePasswordByIdAsync(int Id, string newHashedPassword);
+	Task UpdateRefreshTokenAsync(int userId, string newRefreshToken, IDbTransaction transaction);
+	Task<EmployeeEntity> GetUserByRefreshTokenAsync(string refreshToken, IDbTransaction transaction);
 }
 
 

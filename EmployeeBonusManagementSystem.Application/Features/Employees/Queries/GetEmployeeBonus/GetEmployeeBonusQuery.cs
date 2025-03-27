@@ -1,5 +1,4 @@
-﻿using EmployeeBonusManagementSystem.Application.Features.Employees.Common;
-using MediatR;
+﻿using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;

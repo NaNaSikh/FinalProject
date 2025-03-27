@@ -12,7 +12,6 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories.Implementations
         private IDbTransaction _transaction;
         private readonly PasswordHasher<EmployeeEntity> _passwordHasher = new PasswordHasher<EmployeeEntity>();
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IDbConnectionFactory _connectionFactory;
 
 
 
@@ -174,17 +173,23 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories.Implementations
             }
         }
 
-        public async Task<EmployeeEntity> GetByIdAsync(int id)
-        {
-            var query = "SELECT * FROM Employees WHERE Id = @Id";
-            return await _connection.QueryFirstOrDefaultAsync<EmployeeEntity>(query, new { Id = id }, _transaction);
-        }
+		//public async Task<EmployeeEntity> GetByIdAsync(int id)
+		//{
+		//	var query = "SELECT * FROM Employees WHERE Id = @Id";
 
-        public async Task<PasswordVerificationResult> CheckPasswordByIdAsync(int id, string enteredPassword)
+		//	// Ensure the transaction and connection come from Unit of Work
+		//	return await _unitOfWork.Connection.QueryFirstOrDefaultAsync<EmployeeEntity>(
+		//		query,
+		//		new { Id = id },
+		//		_unitOfWork.Transaction
+		//	);
+		//}
+
+
+		public async Task<PasswordVerificationResult> CheckPasswordByIdAsync(int id, string enteredPassword)
         {
             var userPassword = await GetEmployeePasswordByIdAsync(id);
 
-            Console.WriteLine($"userpassword from database first: {userPassword}");
             if (string.IsNullOrEmpty(userPassword))
             {
                 return PasswordVerificationResult.Failed;
@@ -196,8 +201,8 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories.Implementations
 
         public async Task UpdateEmployeePasswordByIdAsync(int Id, string newHashedPassword)
         {
-            Console.WriteLine($" newHashed password to add in database {newHashedPassword}");
-            string query = "UPDATE Employees SET Password = @PasswordHash WHERE Id = @Id";
+
+	        string query = "UPDATE Employees SET Password = @PasswordHash WHERE Id = @Id";
             var parameters = new { Id = Id, PasswordHash = newHashedPassword };
             await _unitOfWork.Connection.ExecuteAsync(query, parameters);
 
@@ -233,19 +238,19 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories.Implementations
             return await _unitOfWork.Connection.QueryAsync<EmployeeEntity>(query, transaction: _transaction);
         }
 
-        public async Task UpdateAsync(EmployeeEntity employee)
-        {
-            var query = @"
-                UPDATE Employees SET FirstName = @FirstName, LastName = @LastName, PersonalNumber = @PersonalNumber, BirthDate = @BirthDate, Email = @Email, Password = @Password, Salary = @Salary, HireDate = @HireDate, DepartmentId = @DepartmentId, RecommenderEmployeeId = @RecommenderEmployeeId, IsActive = @IsActive, IsPasswordChanged = @IsPasswordChanged, PasswordChangeDate = @PasswordChangeDate
-                WHERE Id = @Id";
-            await _connection.ExecuteAsync(query, employee, _transaction);
-        }
+        //public async Task UpdateAsync(EmployeeEntity employee)
+        //{
+        //    var query = @"
+        //        UPDATE Employees SET FirstName = @FirstName, LastName = @LastName, PersonalNumber = @PersonalNumber, BirthDate = @BirthDate, Email = @Email, Password = @Password, Salary = @Salary, HireDate = @HireDate, DepartmentId = @DepartmentId, RecommenderEmployeeId = @RecommenderEmployeeId, IsActive = @IsActive, IsPasswordChanged = @IsPasswordChanged, PasswordChangeDate = @PasswordChangeDate
+        //        WHERE Id = @Id";
+        //    await _connection.ExecuteAsync(query, employee, _transaction);
+        //}
 
-        public async Task DeleteAsync(EmployeeEntity employee)
-        {
-            var query = "DELETE FROM Employees WHERE Id = @Id";
-            await _connection.ExecuteAsync(query, new { Id = employee.Id }, _transaction);
-        }
+        //public async Task DeleteAsync(EmployeeEntity employee)
+        //{
+        //    var query = "DELETE FROM Employees WHERE Id = @Id";
+        //    await _connection.ExecuteAsync(query, new { Id = employee.Id }, _transaction);
+        //}
 
         public async Task<bool> CheckPasswordAsync(EmployeeEntity user, string enteredPassword)
         {
@@ -322,6 +327,7 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories.Implementations
 
         public async Task<IEnumerable<EmployeeEntity>> GetEmployeeRecomender(int Id)
         {
+            //TODO fix this 
             var query = @"
 			        SELECT recommender.FirstName, recommender.LastName
 					FROM Employees e
@@ -335,6 +341,30 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories.Implementations
 
             return recommender.ToList();
         }
-    }
+
+		public async Task<EmployeeEntity> GetUserByRefreshTokenAsync(string refreshToken, IDbTransaction transaction)
+		{
+			var query = "SELECT * FROM Employees WHERE RefreshToken = @RefreshToken";
+
+			// Ensure the transaction and connection come from Unit of Work
+			return await _unitOfWork.Connection.QueryFirstOrDefaultAsync<EmployeeEntity>(
+				query,
+				new { RefreshToken = refreshToken },
+				transaction
+			);
+		}
+
+		public async Task UpdateRefreshTokenAsync(int userId, string newRefreshToken, IDbTransaction transaction)
+		{
+			var query = "UPDATE Employees SET RefreshToken = @RefreshToken WHERE Id = @UserId";
+
+			// Ensure the transaction and connection come from Unit of Work
+			await _unitOfWork.Connection.ExecuteAsync(
+				query,
+				new { RefreshToken = newRefreshToken, UserId = userId },
+				transaction // Pass the transaction here
+			);
+		}
+	}
 }
 

@@ -4,10 +4,8 @@ using EmployeeBonusManagement.Application.Services.Interfaces;
 using EmployeeBonusManagementSystem.Application.Contracts.Persistence;
 using EmployeeBonusManagementSystem.Application.Contracts.Persistence.Common;
 using EmployeeBonusManagementSystem.Application.Features.Employees.Commands.AddEmployee;
-using EmployeeBonusManagementSystem.Application.Features.Employees.Common;
 using EmployeeBonusManagementSystem.Domain.Entities;
 using EmployeeBonusManagementSystem.Infrastructure.Repositories;
-using EmployeeBonusManagementSystem.Persistence.Factory;
 using EmployeeBonusManagementSystem.Persistence.Repositories;
 using EmployeeBonusManagementSystem.Persistence.Repositories.Common;
 using EmployeeBonusManagementSystem.Persistence.Repositories.Implementations;
@@ -35,8 +33,6 @@ public static class PersistenceDI
 		services.AddScoped<IDbConnection>(provider =>
 			new SqlConnection(configuration.GetConnectionString("DefaultConnection")));
 
-		services.AddScoped<IDbConnectionFactory>(provider =>
-			new SqlConnectionFactory(configuration.GetConnectionString("DefaultConnection")));
 
 		services.AddScoped<IDbTransaction>(provider =>
 		{

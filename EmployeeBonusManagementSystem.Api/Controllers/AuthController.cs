@@ -1,4 +1,5 @@
 ﻿using EmployeeBonusManagementSystem.Application.Features.Employees.Commands.Login;
+using EmployeeBonusManagementSystem.Application.Features.Employees.Commands.RefreshToken;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -27,6 +28,18 @@ namespace EmployeeBonusManagementSystem.Api.Controllers
 			    return Ok(result);
 
 		    return Unauthorized(new { message = "Invalid credentials" });
+	    }
+	    [HttpPost("token/refresh")]
+	    public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequestDto refreshTokenRequest)
+	    {
+		    var result = await _mediator.Send(new RefreshTokenCommand(refreshTokenRequest.RefreshToken));
+
+		    if (result == null)
+		    {
+			    return Unauthorized("Invalid refresh token.");
+		    }
+
+		    return Ok(result);
 	    }
 
 

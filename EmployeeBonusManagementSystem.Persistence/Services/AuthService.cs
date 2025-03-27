@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 using EmployeeBonusManagement.Application.Services.Interfaces;
 using EmployeeBonusManagementSystem.Application.Contracts.Persistence;
 using EmployeeBonusManagementSystem.Application.Features.Employees.Commands.Login;
-using EmployeeBonusManagementSystem.Application.Features.Employees.Common;
+using EmployeeBonusManagementSystem.Application.Features.Employees.Commands.RefreshToken;
 using EmployeeBonusManagementSystem.Domain.Entities;
 using EmployeeBonusManagementSystem.Persistence;
 using Microsoft.AspNetCore.Identity;
@@ -34,7 +35,7 @@ namespace EmployeeBonusManagement.Application.Services
 			_jwtService = jwtService;
 		}
 
-		public async Task<AuthResponse> LoginAsync(LoginDto loginDto)
+		public async Task<AuthResponse> LoginAsync(LoginDto loginDto , IDbTransaction transaction)
 		{
 
 			_unitOfWork.BeginTransaction(); // Ensure a transaction is started
@@ -56,7 +57,7 @@ namespace EmployeeBonusManagement.Application.Services
 			}
 
 			var roles = await _employeeRepository.GetUserRolesAsync(user.Id);
-			var response = _jwtService.GenerateToken(user, roles);
+			var response = await _jwtService.GenerateTokenAsync (user, roles, transaction);
 
 			_unitOfWork.Commit(); // Commit transaction if successful
 			return response;
@@ -92,6 +93,8 @@ namespace EmployeeBonusManagement.Application.Services
 
 			return true;
 		}
+
+	
 	}
 }
 
