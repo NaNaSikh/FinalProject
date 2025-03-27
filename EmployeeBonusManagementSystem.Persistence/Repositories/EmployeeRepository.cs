@@ -13,9 +13,6 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories.Implementations
         private readonly IUnitOfWork _unitOfWork;
 
 
-
-
-
         public EmployeeRepository(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;

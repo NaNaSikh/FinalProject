@@ -1,5 +1,5 @@
-﻿using EmployeeBonusManagementSystem.Application.Features.Employees.Commands.Login;
-using EmployeeBonusManagementSystem.Application.Features.Employees.Commands.RefreshToken;
+﻿using EmployeeBonusManagementSystem.Application.Features.Employees.Commands.RefreshToken;
+using EmployeeBonusManagementSystem.Application.Features.Employees.Queries.Login;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -29,6 +29,7 @@ namespace EmployeeBonusManagementSystem.Api.Controllers
 
 		    return Unauthorized(new { message = "Invalid credentials" });
 	    }
+
 	    [HttpPost("token/refresh")]
 	    public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequestDto refreshTokenRequest)
 	    {

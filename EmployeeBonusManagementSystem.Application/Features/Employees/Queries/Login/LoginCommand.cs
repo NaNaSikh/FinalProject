@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EmployeeBonusManagementSystem.Application.Features.Employees.Commands.Login
+namespace EmployeeBonusManagementSystem.Application.Features.Employees.Queries.Login
 {
     public record  LoginCommand : IRequest<AuthResponse>
 	{

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using EmployeeBonusManagement.Application.Services.Interfaces;
 using EmployeeBonusManagementSystem.Persistence;
 
-namespace EmployeeBonusManagementSystem.Application.Features.Employees.Commands.Login
+namespace EmployeeBonusManagementSystem.Application.Features.Employees.Queries.Login
 {
 	internal class LoginCommandHandler : IRequestHandler<LoginCommand, AuthResponse>
 	{
