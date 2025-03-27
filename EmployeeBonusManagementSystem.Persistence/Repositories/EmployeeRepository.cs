@@ -8,10 +8,10 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories.Implementations
 {
     public class EmployeeRepository : IEmployeeRepository
     {
-        private readonly IDbConnection _connection;
         private IDbTransaction _transaction;
         private readonly PasswordHasher<EmployeeEntity> _passwordHasher = new PasswordHasher<EmployeeEntity>();
         private readonly IUnitOfWork _unitOfWork;
+
 
 
 
@@ -66,14 +66,14 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories.Implementations
         public async Task<bool> ExistsByPersonalNumberAsync(string personalNumber)
         {
             var query = "SELECT COUNT(1) FROM Employees WHERE PersonalNumber = @PersonalNumber";
-            var count = await _connection.ExecuteScalarAsync<int>(query, new { PersonalNumber = personalNumber }, _transaction);
+            var count = await _unitOfWork.Connection.ExecuteScalarAsync<int>(query, new { PersonalNumber = personalNumber }, _transaction);
             return count > 0;
         }
 
         public async Task<bool> ExistsByEmailAsync(string email)
         {
             var query = "SELECT COUNT(1) FROM Employees WHERE Email = @Email";
-            var count = await _connection.ExecuteScalarAsync<int>(query, new { Email = email }, _transaction);
+            var count = await _unitOfWork.Connection.ExecuteScalarAsync<int>(query, new { Email = email }, _transaction);
             return count > 0;
         }
 
@@ -111,28 +111,37 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories.Implementations
                 			INSERT INTO EmployeeRole (EmployeeId, RoleId)
                 			VALUES (@EmployeeId, @RoleId)";
 
-				await _unitOfWork.Connection.ExecuteAsync(roleQuery, new { EmployeeId = employeeId, RoleId = roleId }, transaction);
-				var recommenderQuery = @"
+                await _unitOfWork.Connection.ExecuteAsync(roleQuery, new { EmployeeId = employeeId, RoleId = roleId }, transaction);
+                var recommenderQuery = @"
 									INSERT INTO RecommenderEmployees (EmployeeId, RecommenderEmployeeId , AssignDate)
 									VALUES (@EmployeeId, @RecommenderEmployeeId ,  @AssignDate);";
 
-				await _unitOfWork.Connection.ExecuteAsync(recommenderQuery, new { EmployeeId = employeeId,
-					RecommenderEmployeeId = employee.RecommenderEmployeeId , AssignDate = employee.CreateDate }, transaction);
+                await _unitOfWork.Connection.ExecuteAsync(recommenderQuery, new
+                {
+                    EmployeeId = employeeId,
+                    RecommenderEmployeeId = employee.RecommenderEmployeeId,
+                    AssignDate = employee.CreateDate
+                }, transaction);
 
-				var departmentQuery = @"
+                var departmentQuery = @"
 									   INSERT INTO EmployeeDepartments (EmployeeId, DepartmentId , AssignDate , IsActive)
 									   VALUES (@EmployeeId, @DepartmentId ,  @AssignDate , @IsActive);";
 
-				await _unitOfWork.Connection.ExecuteAsync(departmentQuery, new { EmployeeId = employeeId,
-					DepartmentId = employee.DepartmentId, AssignDate = employee.CreateDate  , IsActive = 1}, transaction);
+                await _unitOfWork.Connection.ExecuteAsync(departmentQuery, new
+                {
+                    EmployeeId = employeeId,
+                    DepartmentId = employee.DepartmentId,
+                    AssignDate = employee.CreateDate,
+                    IsActive = 1
+                }, transaction);
 
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine($"Error adding employee and role: {ex.Message}");
-				throw;
-			}
-		}
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error adding employee and role: {ex.Message}");
+                throw;
+            }
+        }
 
         public async Task<string> GetEmployeePasswordByIdAsync(int Id)
         {
@@ -173,9 +182,11 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories.Implementations
             }
         }
 
-		//public async Task<EmployeeEntity> GetByIdAsync(int id)
-		//{
-		//	var query = "SELECT * FROM Employees WHERE Id = @Id";
+        public async Task<EmployeeEntity> GetByIdAsync(int id)
+        {
+            var query = "SELECT * FROM Employees WHERE Id = @Id";
+            return await _unitOfWork.Connection.QueryFirstOrDefaultAsync<EmployeeEntity>(query, new { Id = id }, _transaction);
+        }
 
 		//	// Ensure the transaction and connection come from Unit of Work
 		//	return await _unitOfWork.Connection.QueryFirstOrDefaultAsync<EmployeeEntity>(

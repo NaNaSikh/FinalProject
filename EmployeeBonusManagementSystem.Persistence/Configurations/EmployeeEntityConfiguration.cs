@@ -24,15 +24,15 @@ public class EmployeeEntityConfiguration : IEntityTypeConfiguration<EmployeeEnti
             .HasMaxLength(11)
             .IsRequired();
         builder.HasIndex(e => e.PersonalNumber)
-	        .IsUnique();
+            .IsUnique();
 
-		builder.Property(e => e.Email)
+        builder.Property(e => e.Email)
             .HasMaxLength(255)
             .IsRequired();
         builder.HasIndex(e => e.Email)
-	        .IsUnique();
+            .IsUnique();
 
-		builder.Property(e => e.Salary)
+        builder.Property(e => e.Salary)
             .HasColumnType("decimal(18,2)")
             .IsRequired();
 
@@ -41,9 +41,9 @@ public class EmployeeEntityConfiguration : IEntityTypeConfiguration<EmployeeEnti
             .IsRequired();
 
         builder.HasIndex(e => e.UserName)
-	        .IsUnique();
+            .IsUnique();
 
-		builder.Property(e => e.Password)
+        builder.Property(e => e.Password)
             .HasMaxLength(255)
             .IsRequired();
 
@@ -51,7 +51,7 @@ public class EmployeeEntityConfiguration : IEntityTypeConfiguration<EmployeeEnti
             .IsRequired();
 
         builder.Property(e => e.PasswordChangeDate)
-            .IsRequired();
+            .IsRequired(false);
 
         builder.Property(e => e.IsActive)
             .IsRequired();
@@ -63,20 +63,20 @@ public class EmployeeEntityConfiguration : IEntityTypeConfiguration<EmployeeEnti
         builder.HasCheckConstraint("CK_Employee_HireDate", "HireDate <= GETDATE()");
 
 
-		builder.HasOne<DepartmentEntity>()
+        builder.HasOne<DepartmentEntity>()
             .WithMany()
             .HasForeignKey(e => e.DepartmentId)
             .OnDelete(DeleteBehavior.Restrict);
 
-		builder.HasOne<EmployeeEntity>()
-			.WithMany() 
-			.HasForeignKey(e => e.RecommenderEmployeeId) 
-			.OnDelete(DeleteBehavior.Restrict);
+        builder.HasOne<EmployeeEntity>()
+            .WithMany()
+            .HasForeignKey(e => e.RecommenderEmployeeId)
+            .OnDelete(DeleteBehavior.Restrict);
 
-		builder.HasOne<EmployeeEntity>()
-			.WithMany() 
-			.HasForeignKey(e => e.CreateByUserId) 
-			.OnDelete(DeleteBehavior.Restrict);
+        builder.HasOne<EmployeeEntity>()
+            .WithMany()
+            .HasForeignKey(e => e.CreateByUserId)
+            .OnDelete(DeleteBehavior.Restrict);
 
-	}
+    }
 }

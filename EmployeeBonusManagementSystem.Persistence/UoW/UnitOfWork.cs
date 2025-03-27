@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 public class UnitOfWork : IUnitOfWork
 {
-	private readonly ApplicationDbContext _context;
-	private readonly IDbConnection _connection;
-	private IDbTransaction _transaction;
-	private bool _disposed;
-	private readonly IServiceProvider _serviceProvider;
+    private readonly ApplicationDbContext _context;
+    private IDbConnection _connection;
+    private IDbTransaction _transaction;
+    private bool _disposed;
+    private readonly IServiceProvider _serviceProvider;
 
 	public UnitOfWork(ApplicationDbContext context, IServiceProvider serviceProvider)
 	{
