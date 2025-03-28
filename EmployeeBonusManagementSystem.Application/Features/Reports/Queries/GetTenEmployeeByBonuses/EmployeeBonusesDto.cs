@@ -2,6 +2,6 @@
 
 public class EmployeeBonusesDto
 {
-    public required string EmployeeFullName { get; set; }
-    public decimal TotalBonusAmount { get; set; }
+    public  string EmployeeFullName { get; set; }
+	public decimal TotalBonus { get; set; }
 }

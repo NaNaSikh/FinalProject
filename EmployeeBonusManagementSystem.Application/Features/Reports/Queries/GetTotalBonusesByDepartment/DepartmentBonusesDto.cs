@@ -2,6 +2,6 @@
 
 public class DepartmentBonusesDto
 {
-    public required string DepartmentName { get; set; }
+    public required string Name { get; set; }
     public decimal TotalBonuses { get; set; }
 }

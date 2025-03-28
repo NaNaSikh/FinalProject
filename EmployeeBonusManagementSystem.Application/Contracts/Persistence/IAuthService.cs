@@ -12,7 +12,7 @@ namespace EmployeeBonusManagement.Application.Services.Interfaces
     public interface IAuthService
     {
         
-	    Task<AuthResponse> LoginAsync(LoginDto loginDto, IDbTransaction transaction);
+	    Task<AuthResponse> LoginAsync(LoginDto loginDto);
 	    bool ValidatePassword(string password, out string errorMessage);
 
 

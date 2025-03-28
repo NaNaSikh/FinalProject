@@ -1,5 +1,5 @@
 ﻿using EmployeeBonusManagement.Application.Services.Interfaces;
-using EmployeeBonusManagementSystem.Application.Features.Employees.Commands.Login;
+using EmployeeBonusManagementSystem.Application.Features.Employees.Queries.Login;
 using EmployeeBonusManagementSystem.Persistence;
 using MediatR;
 using System;

@@ -21,7 +21,7 @@ public class BonusController : ControllerBase
 
     [Authorize(Roles = "Admin")]
     [HttpPost("Bonus")]
-    public async Task<ActionResult<List<AddBonusesDto>>> AddBonus([FromBody] AddBonusesCommand request)
+    public async Task<ActionResult<List<AddBonusesDto>>> AddBonus([FromQuery] AddBonusesCommand request)
     {
         var result = await _mediator.Send(request);
         return Ok(result);
@@ -30,7 +30,7 @@ public class BonusController : ControllerBase
 
     [Authorize(Roles = "Admin")]
     [HttpPost("UpsertBonusConfiguration")]
-    public async Task<ActionResult<List<UpsertBonusConfigurationDto>>> UpsertBonusConfiguration([FromBody] UpsertBonusConfigurationCommand request)
+    public async Task<ActionResult<List<UpsertBonusConfigurationDto>>> UpsertBonusConfiguration([FromQuery] UpsertBonusConfigurationCommand request)
     {
         var result = await _mediator.Send(request);
         return Ok(result);

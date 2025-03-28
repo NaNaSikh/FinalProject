@@ -31,7 +31,7 @@ namespace EmployeeBonusManagementSystem.Api.Controllers
 
         [HttpPost("Employee")]
         //[Authorize(Roles = "Admin")] 
-        public async Task<IActionResult> AddEmployee([FromBody] EmployeeDto employeeDto)
+        public async Task<IActionResult> AddEmployee([FromQuery] EmployeeDto employeeDto)
         {
             var result = await _mediator.Send(new AddEmployeeCommand(employeeDto));
 
@@ -66,7 +66,7 @@ namespace EmployeeBonusManagementSystem.Api.Controllers
 
         [Authorize("User")]
         [HttpPost("Password")]
-        public async Task<IActionResult> UpdatePassword([FromBody] ChangePasswordCommand command)
+        public async Task<IActionResult> UpdatePassword([FromQuery] ChangePasswordCommand command)
         {
             var result = await _mediator.Send(command);
 

@@ -23,21 +23,10 @@ namespace EmployeeBonusManagementSystem.Application.Features.Employees.Queries.L
 
 		public async Task<AuthResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
 		{
-			using var transaction = _unitOfWork.BeginTransaction();  // Start the transaction here
 
-			try
-			{
-				var response = await _authService.LoginAsync(request.LoginDto, transaction);
-
-				_unitOfWork.Commit();  // Commit the transaction after successful operation
-				return response;
-			}
-			catch (Exception ex)
-			{
-				_unitOfWork.Rollback();  // Rollback the transaction on failure
-				Console.WriteLine($"Error in LoginCommandHandler: {ex}");
-				return null;
-			}
+			var response = await _authService.LoginAsync(request.LoginDto);
+			return response;
+			
 		}
 	}
 

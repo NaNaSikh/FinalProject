@@ -210,12 +210,13 @@ WHERE CreateDate BETWEEN @StartDate AND @EndDate;
 
 -- 10 თანამშრომელი, ვინც ყველაზე მეტი ბონუსი მიიღო მითითებულ თარიღში GetTenEmployeeByBonuses
 GO
+
 CREATE PROCEDURE GetTenEmployeeByBonuses
     @StartDate DATE,
     @EndDate DATE
 AS
 BEGIN
-    SELECT TOP 10 e.Id, e.FirstName, e.LastName, SUM(b.Amount) AS TotalBonus
+    SELECT TOP 10 CONCAT(FirstName, ' ', LastName) AS EmployeeFullName,  SUM(b.Amount) AS TotalBonus
     FROM Employees e
     JOIN Bonuses b ON e.Id = b.EmployeeId
     WHERE b.CreateDate BETWEEN @StartDate AND @EndDate

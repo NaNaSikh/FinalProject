@@ -61,7 +61,7 @@ namespace EmployeeBonusManagement.Application.Services
 			{
 				string refreshToken = GenerateRefreshToken();
 
-				await _employeeRepository.UpdateRefreshTokenAsync(user.Id, refreshToken, transactionScope);  // Pass the transaction here
+				await _employeeRepository.UpdateRefreshTokenAsync(user.Id, refreshToken);  // Pass the transaction here
 
 				_unitOfWork.Commit();  // Commit the transaction if everything goes well
 
@@ -90,7 +90,7 @@ namespace EmployeeBonusManagement.Application.Services
 
 		public async Task<RefreshTokenResponseDto> RefreshAccessTokenAsync(string refreshToken, IDbTransaction transaction = null)
 		{
-			var user = await _employeeRepository.GetUserByRefreshTokenAsync(refreshToken, transaction);
+			var user = await _employeeRepository.GetUserByRefreshTokenAsync(refreshToken);
 
 			if (user == null)
 			{
@@ -104,7 +104,7 @@ namespace EmployeeBonusManagement.Application.Services
 			var newRefreshToken = GenerateRefreshToken();
 
 			// Update the refresh token in the database
-			await _employeeRepository.UpdateRefreshTokenAsync(user.Id, newRefreshToken, transaction);
+			await _employeeRepository.UpdateRefreshTokenAsync(user.Id, newRefreshToken);
 
 			return new RefreshTokenResponseDto
 			{

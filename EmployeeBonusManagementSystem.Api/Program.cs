@@ -64,6 +64,7 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(AddEm
 
 
 builder.Services.AddPersistence(builder.Configuration);
+
 builder.Services.AddApplication();
 builder.Services.AddScoped<IUserContextService, UserContextService>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

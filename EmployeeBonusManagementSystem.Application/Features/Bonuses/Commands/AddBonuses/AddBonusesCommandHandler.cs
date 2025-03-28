@@ -17,8 +17,7 @@ public class AddBonusesQueryHandler(IUnitOfWork unitOfWork, IUserContextService 
         // თანამშრომლის ნახვა PersonalNumber ით
         try
         {
-            await unitOfWork.OpenAsync();
-            await unitOfWork.BeginTransactionAsync();
+	        unitOfWork.BeginTransaction();
 
             int userId = userContextService.GetUserId();
 
@@ -46,13 +45,13 @@ public class AddBonusesQueryHandler(IUnitOfWork unitOfWork, IUserContextService 
             await loggingRepository.LogInformationAsync(logEntity);
 
 
-            await unitOfWork.CommitAsync();
+	        unitOfWork.Commit();
             return bonuses;
         }
 
         catch (Exception ex)
         {
-            await unitOfWork.RollbackAsync();
+             unitOfWork.Rollback();
             Console.WriteLine($"[ERROR] Error occurred: {ex.Message}");
 
             var errorLog = new ErrorLogsEntity
@@ -67,9 +66,5 @@ public class AddBonusesQueryHandler(IUnitOfWork unitOfWork, IUserContextService 
             await loggingRepository.LogErrorInformationAsync(errorLog);
             throw new Exception(ex.Message);
         }
-        finally
-        {
-            await unitOfWork.CloseAsync();
-        }
-    }
+    }  
 }

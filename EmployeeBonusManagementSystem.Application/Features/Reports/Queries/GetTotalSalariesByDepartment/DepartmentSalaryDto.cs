@@ -2,6 +2,6 @@
 
 public class DepartmentSalaryDto
 {
-    public required string DepartmentName { get; set; }
-    public decimal TotalSalaries { get; set; }
+    public required string Name { get; set; }
+    public decimal TotalSalary { get; set; }
 }

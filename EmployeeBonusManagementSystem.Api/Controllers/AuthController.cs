@@ -20,7 +20,7 @@ namespace EmployeeBonusManagementSystem.Api.Controllers
 
 
 		[HttpPost("login")]
-	    public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
+	    public async Task<IActionResult> Login([FromQuery] LoginDto loginDto)
 	    {
 		    var result = await _mediator.Send(new LoginCommand(loginDto));
 
@@ -31,7 +31,7 @@ namespace EmployeeBonusManagementSystem.Api.Controllers
 	    }
 
 	    [HttpPost("token/refresh")]
-	    public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequestDto refreshTokenRequest)
+	    public async Task<IActionResult> RefreshToken([FromQuery] RefreshTokenRequestDto refreshTokenRequest)
 	    {
 		    var result = await _mediator.Send(new RefreshTokenCommand(refreshTokenRequest.RefreshToken));
 

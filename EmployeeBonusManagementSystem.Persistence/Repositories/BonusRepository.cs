@@ -5,11 +5,12 @@ using EmployeeBonusManagementSystem.Application.Features.Bonuses.Commands.Update
 using EmployeeBonusManagementSystem.Domain.Entities;
 using Microsoft.Extensions.Configuration;
 using System.Data;
+using EmployeeBonusManagementSystem.Persistence;
 
 public class BonusRepository(
         ISqlQueryRepository sqlQueryRepository,
         ISqlCommandRepository sqlCommandRepository,
-        IConfiguration configuration)
+        IConfiguration configuration , IUnitOfWork unitOfWork)
         : IBonusRepository
 {
     public async Task<List<AddBonusesDto>> AddBonusAsync(BonusEntity bonus, int userId)

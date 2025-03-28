@@ -35,35 +35,43 @@ namespace EmployeeBonusManagement.Application.Services
 			_jwtService = jwtService;
 		}
 
-		public async Task<AuthResponse> LoginAsync(LoginDto loginDto , IDbTransaction transaction)
+		public async Task<AuthResponse> LoginAsync(LoginDto loginDto)
 		{
-
-			_unitOfWork.BeginTransaction(); // Ensure a transaction is started
-
-			var user = await _employeeRepository.GetByEmailAsync(loginDto.Email.ToLower());
-
-			if (user == null)
+			using (var transaction = _unitOfWork.BeginTransaction()) // Ensure transaction is properly assigned
 			{
-				Console.WriteLine("User not found.");
-				_unitOfWork.Rollback(); // Rollback if user is not found
-				return new AuthResponse { Success = false };
+				try
+				{
+					var user = await _employeeRepository.GetByEmailAsync(loginDto.Email);
+
+					if (user == null)
+					{
+						Console.WriteLine("User not found.");
+						_unitOfWork.Rollback();
+						return new AuthResponse { Success = false };
+					}
+
+					if (!await _employeeRepository.CheckPasswordAsync(user, loginDto.Password))
+					{
+						Console.WriteLine("Invalid password.");
+						_unitOfWork.Rollback();
+						return new AuthResponse { Success = false };
+					}
+
+					var roles = await _employeeRepository.GetUserRolesAsync(user.Id);
+					var response = await _jwtService.GenerateTokenAsync(user, roles ,transaction); // Remove transaction if not needed
+
+					_unitOfWork.Commit(); // Commit transaction if successful
+					return response;
+				}
+				catch (Exception ex)
+				{
+					_unitOfWork.Rollback();
+					throw new Exception("Login failed: " + ex.Message);
+				}
 			}
-
-			if (!await _employeeRepository.CheckPasswordAsync(user, loginDto.Password))
-			{
-				Console.WriteLine("Invalid password.");
-				_unitOfWork.Rollback();
-				return new AuthResponse { Success = false };
-			}
-
-			var roles = await _employeeRepository.GetUserRolesAsync(user.Id);
-			var response = await _jwtService.GenerateTokenAsync (user, roles, transaction);
-
-			_unitOfWork.Commit(); // Commit transaction if successful
-			return response;
 		}
 
-		public  bool ValidatePassword(string password, out string errorMessage)
+		public bool ValidatePassword(string password, out string errorMessage)
 		{
 			errorMessage = string.Empty;
 

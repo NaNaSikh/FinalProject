@@ -56,7 +56,13 @@ namespace EmployeeBonusManagementSystem.Infrastructure.Repositories
                    new { StartDate = startDate, EndDate = endDate },
                    configuration.GetConnectionString("DefaultConnection"),
                    CommandType.StoredProcedure);
-                return result.ToList();
+ 
+                var mappedResult = result.Select(r => new EmployeeBonusesDto
+                {
+	                EmployeeFullName = r.EmployeeFullName,
+	                TotalBonus = r.TotalBonus
+                });
+				return mappedResult.ToList();
             }
 
             catch (Exception ex)
