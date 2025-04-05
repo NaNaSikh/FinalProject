@@ -95,7 +95,7 @@ namespace EmployeeBonusManagementSystem.Persistence.Migrations
 
                     b.ToTable("Bonuses", null, t =>
                         {
-                            t.HasCheckConstraint("CK_Bonuses_CreateDate", "CreateDate < GETDATE()");
+                            t.HasCheckConstraint("CK_Bonuses_CreateDate", "CreateDate <= GETDATE()");
                         });
                 });
 
@@ -370,6 +370,32 @@ namespace EmployeeBonusManagementSystem.Persistence.Migrations
                     b.ToTable("RecommenderEmployees", (string)null);
                 });
 
+            modelBuilder.Entity("EmployeeBonusManagementSystem.Domain.Entities.RefreshTokenEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RefreshToken")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId")
+                        .IsUnique();
+
+                    b.ToTable("RefreshToken", (string)null);
+                });
+
             modelBuilder.Entity("EmployeeBonusManagementSystem.Domain.Entities.RolesEntity", b =>
                 {
                     b.Property<int>("RoleId")
@@ -472,6 +498,15 @@ namespace EmployeeBonusManagementSystem.Persistence.Migrations
                     b.HasOne("EmployeeBonusManagementSystem.Domain.Entities.EmployeeEntity", null)
                         .WithMany()
                         .HasForeignKey("RecommenderEmployeeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("EmployeeBonusManagementSystem.Domain.Entities.RefreshTokenEntity", b =>
+                {
+                    b.HasOne("EmployeeBonusManagementSystem.Domain.Entities.EmployeeEntity", null)
+                        .WithOne()
+                        .HasForeignKey("EmployeeBonusManagementSystem.Domain.Entities.RefreshTokenEntity", "EmployeeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });

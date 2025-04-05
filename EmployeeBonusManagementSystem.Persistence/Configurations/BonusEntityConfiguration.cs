@@ -38,12 +38,13 @@ public class BonusEntityConfiguration : IEntityTypeConfiguration<BonusEntity>
 			.HasColumnType("uniqueidentifier")
 			.IsRequired();
 
-		builder.HasCheckConstraint("CK_Bonuses_CreateDate", "CreateDate < GETDATE()");
+		builder.HasCheckConstraint("CK_Bonuses_CreateDate", "CreateDate <= GETDATE()");
 
 		builder.HasOne<EmployeeEntity>()
 	        .WithMany()
 	        .HasForeignKey(e => e.CreateByUserId)
 	        .OnDelete(DeleteBehavior.Restrict);
+
         builder.HasOne<EmployeeEntity>()
 	        .WithMany()
 	        .HasForeignKey(e => e.EmployeeId)

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EmployeeBonusManagementSystem.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250326091512_AddResponseToLogsss")]
-    partial class AddResponseToLogsss
+    [Migration("20250328092013_new")]
+    partial class @new
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -212,7 +212,7 @@ namespace EmployeeBonusManagementSystem.Persistence.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<DateTime>("PasswordChangeDate")
+                    b.Property<DateTime?>("PasswordChangeDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("PersonalNumber")

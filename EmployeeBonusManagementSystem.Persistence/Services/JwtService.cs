@@ -61,9 +61,9 @@ namespace EmployeeBonusManagement.Application.Services
 			{
 				string refreshToken = GenerateRefreshToken();
 
-				await _employeeRepository.UpdateRefreshTokenAsync(user.Id, refreshToken);  // Pass the transaction here
+				await _employeeRepository.UpdateRefreshTokenAsync(user.Id, refreshToken);  
 
-				_unitOfWork.Commit();  // Commit the transaction if everything goes well
+				_unitOfWork.Commit();
 
 				return new AuthResponse
 				{

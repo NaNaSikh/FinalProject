@@ -46,15 +46,6 @@ public class UnitOfWork : IUnitOfWork
 		return _transaction;
 	}
 
-	public async Task BeginTransactionAsync()
-	{
-		if (_transaction == null)
-		{
-			 await _context.Database.BeginTransactionAsync();
-		}
-	}
-
-	// Commit Transaction
 	public void Commit()
 	{
 		_transaction?.Commit();
@@ -90,36 +81,11 @@ public class UnitOfWork : IUnitOfWork
 		}
 	}
 
-	// Open and Close DB Connection
 	public async Task OpenAsync()
 	{
 		if (_connection.State != ConnectionState.Open)
 		{
 			await _context.Database.OpenConnectionAsync();
-		}
-	}
-
-	public async Task CloseAsync()
-	{
-		if (_connection.State != ConnectionState.Closed)
-		{
-			await _context.Database.CloseConnectionAsync();
-		}
-	}
-
-	// Save Changes and Commit
-	public async Task<int> CompleteAsync()
-	{
-		try
-		{
-			int result = await _context.SaveChangesAsync();
-			await CommitAsync();
-			return result;
-		}
-		catch (Exception)
-		{
-			await RollbackAsync();
-			throw;
 		}
 	}
 

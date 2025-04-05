@@ -18,17 +18,11 @@ namespace EmployeeBonusManagementSystem.Persistence
 	    IReportRepository ReportRepository { get; }
 
 		IDbTransaction BeginTransaction(); 
-	    Task BeginTransactionAsync(); 
 	    void Commit();
-	    Task CommitAsync();
 	    void Rollback();
-	    Task RollbackAsync();
 	    IDbConnection Connection { get; } 
-	    Task<int> CompleteAsync();
-	    Task CloseAsync();
 	    Task OpenAsync();
 	    IDbTransaction Transaction { get; }
-
 
     }
 }

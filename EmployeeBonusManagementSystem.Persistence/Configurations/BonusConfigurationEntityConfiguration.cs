@@ -32,3 +32,4 @@ public class BonusConfigurationEntityConfiguration : IEntityTypeConfiguration<Bo
           .IsRequired();
     }
 }
+	

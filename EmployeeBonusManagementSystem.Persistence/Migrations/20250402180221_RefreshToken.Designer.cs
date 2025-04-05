@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EmployeeBonusManagementSystem.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250326091358_AddResponseToLogss")]
-    partial class AddResponseToLogss
+    [Migration("20250402180221_RefreshToken")]
+    partial class RefreshToken
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -98,7 +98,7 @@ namespace EmployeeBonusManagementSystem.Persistence.Migrations
 
                     b.ToTable("Bonuses", null, t =>
                         {
-                            t.HasCheckConstraint("CK_Bonuses_CreateDate", "CreateDate < GETDATE()");
+                            t.HasCheckConstraint("CK_Bonuses_CreateDate", "CreateDate <= GETDATE()");
                         });
                 });
 
@@ -212,7 +212,7 @@ namespace EmployeeBonusManagementSystem.Persistence.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<DateTime>("PasswordChangeDate")
+                    b.Property<DateTime?>("PasswordChangeDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("PersonalNumber")
@@ -373,6 +373,32 @@ namespace EmployeeBonusManagementSystem.Persistence.Migrations
                     b.ToTable("RecommenderEmployees", (string)null);
                 });
 
+            modelBuilder.Entity("EmployeeBonusManagementSystem.Domain.Entities.RefreshTokenEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RefreshToken")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId")
+                        .IsUnique();
+
+                    b.ToTable("RefreshToken", (string)null);
+                });
+
             modelBuilder.Entity("EmployeeBonusManagementSystem.Domain.Entities.RolesEntity", b =>
                 {
                     b.Property<int>("RoleId")
@@ -475,6 +501,15 @@ namespace EmployeeBonusManagementSystem.Persistence.Migrations
                     b.HasOne("EmployeeBonusManagementSystem.Domain.Entities.EmployeeEntity", null)
                         .WithMany()
                         .HasForeignKey("RecommenderEmployeeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("EmployeeBonusManagementSystem.Domain.Entities.RefreshTokenEntity", b =>
+                {
+                    b.HasOne("EmployeeBonusManagementSystem.Domain.Entities.EmployeeEntity", null)
+                        .WithOne()
+                        .HasForeignKey("EmployeeBonusManagementSystem.Domain.Entities.RefreshTokenEntity", "EmployeeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });

@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EmployeeBonusManagementSystem.Api.Controllers
 {
     [ApiController]
-    [Route("api/Employees")]
+    [Route("api/employees")]
     public class EmployeeController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -29,9 +29,9 @@ namespace EmployeeBonusManagementSystem.Api.Controllers
             return Ok(employees);
         }
 
-        [HttpPost("Employee")]
+        [HttpPost("add")]
         //[Authorize(Roles = "Admin")] 
-        public async Task<IActionResult> AddEmployee([FromQuery] EmployeeDto employeeDto)
+        public async Task<IActionResult> AddEmployee([FromBody] EmployeeDto employeeDto)
         {
             var result = await _mediator.Send(new AddEmployeeCommand(employeeDto));
 
@@ -40,7 +40,7 @@ namespace EmployeeBonusManagementSystem.Api.Controllers
 
 
         [Authorize("User")]
-        [HttpGet("Bonus")]
+        [HttpGet("bonus")]
         public async Task<ActionResult<List<GetEmployeeBonusDto>>> GetEmoloyeeBonus()
         {
             var result = await _mediator.Send(new GetEmployeeBonusQuery());
@@ -49,7 +49,7 @@ namespace EmployeeBonusManagementSystem.Api.Controllers
 
 
         [Authorize("User")]
-        [HttpGet("Salary")]
+        [HttpGet("salary")]
         public async Task<ActionResult<List<GetEmployeeBonusDto>>> GetEmoloyeeSalary()
         {
             var result = await _mediator.Send(new GetEmployeeSalaryQuery());
@@ -57,7 +57,7 @@ namespace EmployeeBonusManagementSystem.Api.Controllers
         }
 
         [Authorize("User")]
-        [HttpGet("Recommender")]
+        [HttpGet("recommender")]
         public async Task<ActionResult<List<GetEmployeeRecommenderDto>>> GetEmoloyeeRecommender()
         {
             var result = await _mediator.Send(new GetEmployeeRecommenderQuery());
@@ -65,7 +65,7 @@ namespace EmployeeBonusManagementSystem.Api.Controllers
         }
 
         [Authorize("User")]
-        [HttpPost("Password")]
+        [HttpPut("password/change")]
         public async Task<IActionResult> UpdatePassword([FromQuery] ChangePasswordCommand command)
         {
             var result = await _mediator.Send(command);

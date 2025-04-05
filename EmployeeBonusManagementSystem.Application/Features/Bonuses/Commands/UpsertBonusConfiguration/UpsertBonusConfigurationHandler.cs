@@ -15,8 +15,8 @@ public class UpsertBonusConfigurationHandler(
     {
         try
         {
-            await unitOfWork.OpenAsync();
-            await unitOfWork.BeginTransactionAsync();
+           // await unitOfWork.OpenAsync();
+	        unitOfWork.BeginTransaction();
 
             var userId = userContextService.GetUserId();
 
@@ -29,17 +29,13 @@ public class UpsertBonusConfigurationHandler(
                 request.RecommendationBonusRate,
                 userId);
 
-            await unitOfWork.CommitAsync();
+	        unitOfWork.Commit();
             return result;
         }
         catch (Exception ex)
         {
-            await unitOfWork.RollbackAsync();
+	        unitOfWork.Rollback();
             throw new Exception(ex.Message);
-        }
-        finally
-        {
-            await unitOfWork.CloseAsync();
         }
     }
 }
