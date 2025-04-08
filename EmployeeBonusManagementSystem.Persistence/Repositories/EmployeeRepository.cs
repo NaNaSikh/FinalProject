@@ -48,7 +48,7 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories.Implementations
 			}
 
 
-			public async Task<bool> ExistsByPersonalNumberAsync(string personalNumber)
+	    public async Task<bool> ExistsByPersonalNumberAsync(string personalNumber)
         {
             var query = "SELECT COUNT(1) FROM Employees WHERE PersonalNumber = @PersonalNumber";
             var count = await _unitOfWork.Connection.ExecuteScalarAsync<int>(query, new { PersonalNumber = personalNumber }, _transaction);
@@ -285,7 +285,10 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories.Implementations
 
 		public async Task<EmployeeEntity> GetUserByRefreshTokenAsync(string refreshToken)
 		{
-			const string query = "SELECT * FROM Employees WHERE RefreshToken = @RefreshToken";
+			const string query = @"SELECT e.*
+								FROM Employees e
+								INNER JOIN RefreshToken rt ON e.Id = rt.EmployeeId
+								WHERE rt.RefreshToken = @RefreshToken";
 
 			var employee = await _connection.QueryFirstOrDefaultAsync<EmployeeEntity>(
 				query, new { RefreshToken = refreshToken });
@@ -293,14 +296,7 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories.Implementations
 			return employee;
 		}
 
-		public async Task UpdateRefreshTokenAsync(int userId, string newRefreshToken)
-		{
-			var query = "UPDATE Employees SET RefreshToken = @RefreshToken WHERE Id = @UserId";
-
-			// Directly execute the query without a transaction
-			await _connection.ExecuteAsync(
-				query, new { RefreshToken = newRefreshToken, UserId = userId });
-		}
+		
 	}
 }
 

@@ -21,24 +21,27 @@ namespace EmployeeBonusManagementSystem.Application.Features.Employees.Commands.
 		private readonly IEmployeeRepository _employeeRepository;
 		private readonly IUnitOfWork _unitOfWork;
 		private readonly IMapper _mapper;
-		private readonly IJwtService _jwtService;
 		private readonly ILoggingRepository _loggingRepository;
 		private readonly IUserContextService _userContextService;
+		private readonly IRefreshTokenRepository _refreshTokenRepository;
+		private readonly IJwtService _jwtService;
 
 		public AddEmployeeCommandHandler(
 			IEmployeeRepository employeeRepository,
 			IUnitOfWork unitOfWork,
 			IMapper mapper,
-			IJwtService jwtService,
 			ILoggingRepository loggingRepository,
-			IUserContextService userContextService)
+			IUserContextService userContextService,
+			IRefreshTokenRepository refreshTokenRepository,
+			IJwtService jwtService)
 		{
 			_employeeRepository = employeeRepository;
 			_unitOfWork = unitOfWork;
 			_mapper = mapper;
-			_jwtService = jwtService;
 			_loggingRepository = loggingRepository;
 			_userContextService = userContextService;
+			_refreshTokenRepository = refreshTokenRepository;
+			_jwtService = jwtService;
 		}
 
 		public async Task<AddEmploeeResponseDto> Handle(AddEmployeeCommand request, CancellationToken cancellationToken)
@@ -56,13 +59,14 @@ namespace EmployeeBonusManagementSystem.Application.Features.Employees.Commands.
 
 					var hasher = new PasswordHasher<EmployeeEntity>();
 					employee.Password = hasher.HashPassword(null, request.EmployeeDto.Password);
-					employee.RefreshToken = _jwtService.GenerateRefreshToken();
 					employee.CreateDate = DateTime.UtcNow;
 					employee.PasswordChangeDate = DateTime.UtcNow;
 					employee.CreateByUserId = userId;
 
-					await _employeeRepository.AddEmployeeAsync(employee, request.EmployeeDto.Role, transaction);
 
+					await _employeeRepository.AddEmployeeAsync(employee, request.EmployeeDto.Role, transaction);
+					var newRefreshToken = _jwtService.GenerateRefreshToken(employee.Id);
+					await _refreshTokenRepository.AddNewRefreshTokenAsync(newRefreshToken);
 					var response =  new AddEmploeeResponseDto()
 					{
 						Success = true,

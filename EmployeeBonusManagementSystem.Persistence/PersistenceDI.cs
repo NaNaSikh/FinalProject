@@ -44,10 +44,11 @@ public static class PersistenceDI
         services.AddScoped<ISqlQueryRepository, SqlQueryRepository>();
         services.AddScoped<ISqlCommandRepository, SqlCommandRepository>();
         services.AddScoped<ILoggingRepository, LoggingRepository>();
+        services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 
-        //services.AddScoped<IHttpContextAccessor>();
+		//services.AddScoped<IHttpContextAccessor>();
 
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
+		services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IJwtService, JwtService>();

@@ -23,10 +23,4 @@ public class EmployeeEntity : BaseEntity
     public int CreateByUserId { get; set; }
     public DateTime CreateDate { get; set; }
 
-    //
-    public string RefreshToken { get; set; }
-
-    //public LogsEntity Logs { get; set; }
-    //public ErrorLogsEntity ErrorLogs { get; set; }
-
 }
