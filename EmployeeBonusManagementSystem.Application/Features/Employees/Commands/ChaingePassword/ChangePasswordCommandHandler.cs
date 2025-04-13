@@ -53,7 +53,7 @@ namespace EmployeeBonusManagementSystem.Application.Features.Employees.Commands.
 
 						_logger.LogInformation("User {UserId} initiated a password change request.", userId);
 
-						var result = await _employeeRepository.CheckPasswordByIdAsync(userId, request.currentPassword);
+						var result = await _authService.CheckPasswordByIdAsync(userId, request.currentPassword);
 
 						if (result == PasswordVerificationResult.Success)
 						{

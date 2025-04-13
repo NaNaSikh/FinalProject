@@ -13,7 +13,20 @@ public class BonusRepository(
         IConfiguration configuration , IUnitOfWork unitOfWork)
         : IBonusRepository
 {
-    public async Task<List<AddBonusesDto>> AddBonusAsync(BonusEntity bonus, int userId)
+
+	private IDbConnection _connection;
+	private IDbTransaction _transaction;
+
+	public void SetConnection(IDbConnection connection)
+	{
+		_connection = connection;
+	}
+
+	public void SetTransaction(IDbTransaction transaction)
+	{
+		_transaction = transaction;
+	}
+	public async Task<List<AddBonusesDto>> AddBonusAsync(BonusEntity bonus, int userId)
     {
         try
         {

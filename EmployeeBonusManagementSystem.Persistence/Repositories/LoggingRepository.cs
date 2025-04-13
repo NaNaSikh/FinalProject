@@ -19,12 +19,24 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories
 	    private readonly ILogger<LoggingRepository> _logger;
 	    private readonly IUnitOfWork _unitOfWork;
 
-
 		public LoggingRepository(ILogger<LoggingRepository> logger, IUnitOfWork unitOfWork)
 	    {
 		    _logger = logger;
 		    _unitOfWork = unitOfWork;
 
+		}
+
+		private IDbConnection _connection;
+		private IDbTransaction _transaction;
+
+		public void SetConnection(IDbConnection connection)
+		{
+			_connection = connection;
+		}
+
+		public void SetTransaction(IDbTransaction transaction)
+		{
+			_transaction = transaction;
 		}
 
 		public async Task LogInformationAsync(LogsEntity logsEntity)
@@ -35,21 +47,19 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories
 			var query = @"INSERT INTO Logs (TimeStamp, UserId, ActionType, Request, Response) 
                   VALUES (@TimeStamp, @UserId, @ActionType, @Request , @Response);";
 
-			if (_unitOfWork.Connection.State != ConnectionState.Open)
-			{
-				await _unitOfWork.OpenAsync();
-			}
+			if (_connection == null)
+				throw new InvalidOperationException("Database connection is not initialized.");
 
 			try
 			{
-				await _unitOfWork.Connection.ExecuteAsync(query, new
+				await _connection.ExecuteAsync(query, new
 				{
 					TimeStamp = logsEntity.TimeStamp,
 					UserId = logsEntity.UserId,
 					ActionType = logsEntity.ActionType,
 					Request = logsEntity.Request,
 					Response = logsEntity.Response
-				}, _unitOfWork.Transaction);  // ✅ Use existing transaction
+				}, _transaction);  // ✅ Use existing transaction
 
 				// ✅ Do NOT commit or rollback here, let the UoW handle it
 			}
@@ -69,21 +79,19 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories
 			var query = @"INSERT INTO ErrorLogs (TimeStamp, UserId, Level, Message, Exception) 
                   VALUES (@TimeStamp, @UserId, @Level, @Message , @Exception);";
 
-			if (_unitOfWork.Connection.State != ConnectionState.Open)
-			{
-				await _unitOfWork.OpenAsync();
-			}
+			if (_connection == null)
+				throw new InvalidOperationException("Database connection is not initialized.");
 
 			try
 			{
-				await _unitOfWork.Connection.ExecuteAsync(query, new
+				await _connection.ExecuteAsync(query, new
 				{
 					TimeStamp = errorlogsEntity.TimeStamp,
 					UserId = errorlogsEntity.UserId,
 					Level = errorlogsEntity.Level,
 					Message = errorlogsEntity.Message,
 					Exception = errorlogsEntity.Exception
-				}, _unitOfWork.Transaction);  
+				}, _transaction);  
 
 			}
 			catch (Exception ex)

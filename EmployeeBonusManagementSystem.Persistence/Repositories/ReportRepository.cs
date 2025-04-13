@@ -18,8 +18,22 @@ namespace EmployeeBonusManagementSystem.Infrastructure.Repositories
         IConfiguration configuration)
         : IReportRepository
     {
-        // ჯამურად გაცემული ბონუსების რაოდენობა მითითებულ თარიღებში     
-        public async Task<TotalBonusesDto> GetTotalBonusesAsync(DateTime startDate, DateTime endDate)
+	    private IDbConnection _connection;
+	    private IDbTransaction _transaction;
+
+	    public void SetConnection(IDbConnection connection)
+	    {
+		    _connection = connection;
+	    }
+
+	    public void SetTransaction(IDbTransaction transaction)
+	    {
+		    _transaction = transaction;
+	    }
+
+
+		// ჯამურად გაცემული ბონუსების რაოდენობა მითითებულ თარიღებში     
+		public async Task<TotalBonusesDto> GetTotalBonusesAsync(DateTime startDate, DateTime endDate)
         {
             try
             {

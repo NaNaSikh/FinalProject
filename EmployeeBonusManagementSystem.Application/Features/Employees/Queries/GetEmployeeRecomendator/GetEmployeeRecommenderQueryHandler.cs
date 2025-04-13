@@ -28,7 +28,7 @@ namespace EmployeeBonusManagementSystem.Application.Features.Employees.Queries.G
     {
 			int userId = _userContextService.GetUserId();
 
-			var bonuses = await _employeeRepository.GetEmployeeRecomender(userId);
+			var bonuses = await _employeeRepository.GetEmployeeRecommender(userId);
 			return _mapper.Map<List<GetEmployeeRecommenderDto>>(bonuses);
     }
     }

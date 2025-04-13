@@ -11,18 +11,16 @@ namespace EmployeeBonusManagementSystem.Persistence
 {
     public interface IUnitOfWork : IDisposable
     {
+	    
+		IDbTransaction BeginTransaction(); 
+	    void Commit();
+	    void Rollback();
 	    ISqlCommandRepository SqlCommandRepository { get; }
 	    ISqlQueryRepository SqlQueryRepository { get; }
 	    IBonusRepository BonusRepository { get; }
 	    IEmployeeRepository EmployeeRepository { get; }
 	    IReportRepository ReportRepository { get; }
-
-		IDbTransaction BeginTransaction(); 
-	    void Commit();
-	    void Rollback();
-	    IDbConnection Connection { get; } 
-	    Task OpenAsync();
-	    IDbTransaction Transaction { get; }
-
-    }
+	    ILoggingRepository LoggingRepository { get; }
+	    IRefreshTokenRepository RefreshTokenRepository { get; }
+	}
 }

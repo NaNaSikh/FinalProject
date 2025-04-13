@@ -6,17 +6,25 @@ using System.Data;
 
 namespace EmployeeBonusManagementSystem.Persistence.Repositories.Common;
 
-internal class SqlQueryRepository(
-    IConfiguration config)
-    : ISqlQueryRepository
+public class SqlQueryRepository(IConfiguration config): ISqlQueryRepository
 {
-    public async Task<IEnumerable<T>> LoadData<T, U>(
-    string sql,
-    U parameters,
-    string connectionId = "Default",
-    CommandType commandType = CommandType.StoredProcedure)
+
+	private IDbConnection _connection;
+	private IDbTransaction _transaction;
+
+	public void SetConnection(IDbConnection connection)
+	{
+		_connection = connection;
+	}
+
+	public void SetTransaction(IDbTransaction transaction)
+	{
+		_transaction = transaction;
+	}
+	public async Task<IEnumerable<T>> LoadData<T, U>(string sql, U parameters,
+												    string connectionId = "Default",
+												    CommandType commandType = CommandType.StoredProcedure)
     {
-        //using IDbConnection connection = new SqlConnection(_config.GetConnectionString(connectionId));
         using IDbConnection connection = new SqlConnection(connectionId);
 
         return await connection.QueryAsync<T>(
@@ -26,29 +34,22 @@ internal class SqlQueryRepository(
     }
 
 
-    public async Task<T> LoadDataFirstOrDefault<T, U>(
-        string sql,
-        U parameters,
-        string connectionId = "Default",
-        CommandType commandType = CommandType.StoredProcedure)
+    public async Task<T> LoadDataFirstOrDefault<T, U>(string sql, U parameters,
+											        string connectionId = "Default",
+											        CommandType commandType = CommandType.StoredProcedure)
     {
-        //using IDbConnection connection = new SqlConnection(_config.GetConnectionString(connectionId));
         using IDbConnection connection = new SqlConnection(connectionId);
-
         return await connection.QueryFirstOrDefaultAsync<T>(
             sql: sql,
             param: parameters,
             commandType: commandType);
     }
 
-    public async Task<IEnumerable<T>> LoadMultipleData<T, U>(
-    string sql,
-    U parameters,
-    string connectionId = "Default",
-    CommandType commandType = CommandType.StoredProcedure)
+    public async Task<IEnumerable<T>> LoadMultipleData<T, U>(string sql, U parameters,
+														    string connectionId = "Default",
+														    CommandType commandType = CommandType.StoredProcedure)
     {
         using IDbConnection connection = new SqlConnection(connectionId);
-
         return await connection.QueryAsync<T>(
             sql: sql,
             param: parameters,

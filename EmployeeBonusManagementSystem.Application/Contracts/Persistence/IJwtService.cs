@@ -13,9 +13,9 @@ namespace EmployeeBonusManagement.Application.Services.Interfaces
 {
     public interface IJwtService
     {
-	    Task<AuthResponse> GenerateTokenAsync(EmployeeEntity user, IList<string> roles, IDbTransaction transaction);
-	    RefreshTokenEntity GenerateRefreshToken(int Id);
-	    Task<RefreshTokenResponseDto> RefreshAccessTokenAsync(string refreshToken , IDbTransaction transaction);
+	    Task<AuthResponse> GenerateTokenAsync(EmployeeEntity user, IList<string> roles);
+	    string GenerateRefreshToken(); 
+	    Task<RefreshTokenResponseDto> RefreshAccessTokenAsync(string refreshToken );
 
 	}
 }

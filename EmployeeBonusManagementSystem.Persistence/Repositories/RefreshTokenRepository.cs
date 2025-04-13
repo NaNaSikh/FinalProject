@@ -12,13 +12,25 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories
 {
     public class RefreshTokenRepository : IRefreshTokenRepository
 	{
-	  //  private readonly IUnitOfWork _unitOfWork;
-	    private readonly IDbConnection _connection;
-	    public RefreshTokenRepository(IDbConnection connection)
+	    private readonly IUnitOfWork _unitOfWork;
+	    private IDbConnection _connection;
+	    private IDbTransaction _transaction;
+
+	    public void SetConnection(IDbConnection connection)
 	    {
-		    _connection = connection ?? throw new ArgumentNullException(nameof(connection));
+		    _connection = connection;
 	    }
 
+	    public void SetTransaction(IDbTransaction transaction)
+	    {
+		    _transaction = transaction;
+	    }
+
+
+	    public RefreshTokenRepository(IUnitOfWork unitOfWork)
+	    {
+		    _unitOfWork = unitOfWork;
+	    }
 		public async Task<RefreshTokenEntity?> GetEmployeeRefreshTokenByIdAsync(int Id)
 	    {
 		    const string query = @"

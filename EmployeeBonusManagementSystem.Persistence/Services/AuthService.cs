@@ -1,8 +1,4 @@
-﻿using System;
-using System.Data;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+﻿
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using EmployeeBonusManagement.Application.Services.Interfaces;
@@ -12,10 +8,7 @@ using EmployeeBonusManagementSystem.Application.Features.Employees.Queries.Login
 using EmployeeBonusManagementSystem.Domain.Entities;
 using EmployeeBonusManagementSystem.Persistence;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
+
 
 namespace EmployeeBonusManagement.Application.Services
 {
@@ -25,19 +18,19 @@ namespace EmployeeBonusManagement.Application.Services
 		private readonly IEmployeeRepository _employeeRepository;
 		private readonly IJwtService _jwtService;
 		private readonly IUnitOfWork _unitOfWork;
+		private readonly IAuthService _authService;
 
-		public AuthService(IEmployeeRepository employeeRepository, IUnitOfWork unitOfWork , IJwtService jwtService)
+		public AuthService(IEmployeeRepository employeeRepository, IUnitOfWork unitOfWork , IJwtService jwtService, IAuthService authService)
 		{
 			_employeeRepository = employeeRepository;
-
 			_unitOfWork = unitOfWork;
-
 			_jwtService = jwtService;
+			_authService = authService;
 		}
 
 		public async Task<AuthResponse> LoginAsync(LoginDto loginDto)
 		{
-			using (var transaction = _unitOfWork.BeginTransaction()) // Ensure transaction is properly assigned
+			using (var transaction = _unitOfWork.BeginTransaction()) 
 			{
 				try
 				{
@@ -50,17 +43,15 @@ namespace EmployeeBonusManagement.Application.Services
 						return new AuthResponse { Success = false };
 					}
 
-					if (!await _employeeRepository.CheckPasswordAsync(user, loginDto.Password))
+					if (!await _authService.CheckPasswordAsync(user, loginDto.Password))
 					{
 						Console.WriteLine("Invalid password.");
 						_unitOfWork.Rollback();
 						return new AuthResponse { Success = false };
 					}
-
 					var roles = await _employeeRepository.GetUserRolesAsync(user.Id);
-					var response = await _jwtService.GenerateTokenAsync(user, roles ,transaction); // Remove transaction if not needed
-
-					_unitOfWork.Commit(); // Commit transaction if successful
+					var response = await _jwtService.GenerateTokenAsync(user, roles ); 
+					_unitOfWork.Commit(); 
 					return response;
 				}
 				catch (Exception ex)
@@ -102,7 +93,43 @@ namespace EmployeeBonusManagement.Application.Services
 			return true;
 		}
 
-	
+
+		public async Task<bool> CheckPasswordAsync(EmployeeEntity user, string enteredPassword)
+		{
+			if (user == null || string.IsNullOrEmpty(user.Password))
+			{
+				return false;
+			}
+
+			var hasher = new PasswordHasher<EmployeeEntity>(); 
+			var result = hasher.VerifyHashedPassword(user, user.Password, enteredPassword);
+			Console.WriteLine($"{result}");
+
+			if (result == PasswordVerificationResult.SuccessRehashNeeded)
+			{
+
+				var newHashedPassword = hasher.HashPassword(user, enteredPassword);
+				user.Password = newHashedPassword;
+
+				return true;
+			}
+
+			return result == PasswordVerificationResult.Success;
+		}
+
+		public async Task<PasswordVerificationResult> CheckPasswordByIdAsync(int id, string enteredPassword)
+		{
+			var userPassword = await _employeeRepository.GetEmployeePasswordByIdAsync(id);
+
+			if (string.IsNullOrEmpty(userPassword))
+			{
+				return PasswordVerificationResult.Failed;
+			}
+
+			var hasher = new PasswordHasher<EmployeeEntity>();
+			return hasher.VerifyHashedPassword(null, userPassword, enteredPassword);
+		}
+
 	}
 }
 

@@ -12,6 +12,7 @@ using EmployeeBonusManagementSystem.Persistence;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 
 
 namespace EmployeeBonusManagementSystem.Application.Features.Employees.Commands.AddEmployee
@@ -25,6 +26,8 @@ namespace EmployeeBonusManagementSystem.Application.Features.Employees.Commands.
 		private readonly IUserContextService _userContextService;
 		private readonly IRefreshTokenRepository _refreshTokenRepository;
 		private readonly IJwtService _jwtService;
+		private readonly IConfiguration _config;
+
 
 		public AddEmployeeCommandHandler(
 			IEmployeeRepository employeeRepository,
@@ -33,7 +36,8 @@ namespace EmployeeBonusManagementSystem.Application.Features.Employees.Commands.
 			ILoggingRepository loggingRepository,
 			IUserContextService userContextService,
 			IRefreshTokenRepository refreshTokenRepository,
-			IJwtService jwtService)
+			IJwtService jwtService,
+			IConfiguration config)
 		{
 			_employeeRepository = employeeRepository;
 			_unitOfWork = unitOfWork;
@@ -42,6 +46,8 @@ namespace EmployeeBonusManagementSystem.Application.Features.Employees.Commands.
 			_userContextService = userContextService;
 			_refreshTokenRepository = refreshTokenRepository;
 			_jwtService = jwtService;
+			_config = config;
+
 		}
 
 		public async Task<AddEmploeeResponseDto> Handle(AddEmployeeCommand request, CancellationToken cancellationToken)
@@ -64,10 +70,17 @@ namespace EmployeeBonusManagementSystem.Application.Features.Employees.Commands.
 					employee.CreateByUserId = userId;
 
 
-					await _employeeRepository.AddEmployeeAsync(employee, request.EmployeeDto.Role, transaction);
-					var newRefreshToken = _jwtService.GenerateRefreshToken(employee.Id);
-					await _refreshTokenRepository.AddNewRefreshTokenAsync(newRefreshToken);
-					var response =  new AddEmploeeResponseDto()
+					await _unitOfWork.EmployeeRepository.AddEmployeeAsync(employee, request.EmployeeDto.Role);
+
+					var newRefreshToken = new RefreshTokenEntity
+					{
+						EmployeeId = userId,
+						ExpirationDate =
+							DateTime.UtcNow.AddDays(Convert.ToInt32(_config["RefreshToken:ExpirationDays"])),
+						RefreshToken = _jwtService.GenerateRefreshToken()
+					};
+					await _unitOfWork.RefreshTokenRepository.AddNewRefreshTokenAsync(newRefreshToken);
+					var response = new AddEmploeeResponseDto()
 					{
 						Success = true,
 						Message = "Employee added successfully",
@@ -81,17 +94,15 @@ namespace EmployeeBonusManagementSystem.Application.Features.Employees.Commands.
 						ActionType = "AddEmployee",
 						Request = JsonSerializer.Serialize(request),
 						Response = JsonSerializer.Serialize(response)
-
 					};
-					await _loggingRepository.LogInformationAsync(logEntity);
+					await _unitOfWork.LoggingRepository.LogInformationAsync(logEntity);
 
-					transaction.Commit();
-				//	Console.WriteLine($"[INFO] Employee saved successfully in database: {request.EmployeeDto.FirstName}");
+					 _unitOfWork.Commit(); // Commit the transaction at the handler level
 					return response;
 				}
 				catch (Exception ex)
 				{
-					transaction.Rollback();
+					 _unitOfWork.Rollback(); // Rollback the transaction on error
 					Console.WriteLine($"[ERROR] Error occurred: {ex.Message}");
 
 					var errorLog = new ErrorLogsEntity
@@ -102,13 +113,13 @@ namespace EmployeeBonusManagementSystem.Application.Features.Employees.Commands.
 						Message = "An error occurred while adding an employee.",
 						Exception = ex.ToString()
 					};
-
-					await _loggingRepository.LogErrorInformationAsync(errorLog);
+					await _unitOfWork.LoggingRepository.LogErrorInformationAsync(errorLog);
 
 					return new AddEmploeeResponseDto() { Success = false, Message = "Employee was not added" };
 				}
 			}
-
 		}
+
+	
 	}
 }
