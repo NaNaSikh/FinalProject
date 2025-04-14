@@ -24,9 +24,30 @@ namespace EmployeeBonusManagementSystem.Application.Features.Employees.Queries.L
 		public async Task<AuthResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
 		{
 
-			var response = await _authService.LoginAsync(request.LoginDto);
-			return response;
-			
+			using (var transaction = _unitOfWork.BeginTransaction())
+			{
+				try
+				{
+					var response = await _authService.LoginAsync(request.LoginDto);
+
+					if (response?.Success == true)
+					{
+						_unitOfWork.Commit();
+						return response;
+					}
+					else
+					{
+						 _unitOfWork.Rollback();
+						return response;
+					}
+				}
+				catch (Exception ex)
+				{
+					 _unitOfWork.Rollback();
+					return new AuthResponse { Success = false, Message = $"Login Faled {ex}"};
+				}
+			}
+
 		}
 	}
 

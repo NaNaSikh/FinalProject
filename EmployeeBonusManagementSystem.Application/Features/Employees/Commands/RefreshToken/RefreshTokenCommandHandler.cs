@@ -23,18 +23,18 @@ namespace EmployeeBonusManagementSystem.Application.Features.Employees.Commands.
 
 		public async Task<RefreshTokenResponseDto> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
 		{
-			using var transaction = _unitOfWork.BeginTransaction();  // Start the transaction here
+			using var transaction = _unitOfWork.BeginTransaction(); 
 
 			try
 			{
-				var response = await _jwtService.RefreshAccessTokenAsync(request.refreshToken, transaction);
+				var response = await _jwtService.RefreshAccessTokenAsync(request.refreshToken);
 
-				_unitOfWork.Commit();  // Commit the transaction after successful operation
+				_unitOfWork.Commit();  
 				return response;
 			}
 			catch (Exception ex)
 			{
-				_unitOfWork.Rollback();  // Rollback the transaction on failure
+				_unitOfWork.Rollback();  
 				Console.WriteLine($"Error in RefreshTokenCommandHandler: {ex}");
 				return null;
 			}

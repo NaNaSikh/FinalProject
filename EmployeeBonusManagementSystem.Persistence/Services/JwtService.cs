@@ -22,24 +22,20 @@ namespace EmployeeBonusManagement.Application.Services
 	{
 		private readonly IConfiguration _config;
 		private readonly IEmployeeRepository _employeeRepository;
-		private readonly IUnitOfWork _unitOfWork;
 		private readonly IRefreshTokenRepository _refreshTokenRepository;
 
-		public JwtService(IRefreshTokenRepository refreshTokenRepository, IConfiguration config, IUnitOfWork unitOfWork,
-			IEmployeeRepository employeeRepository, IUserContextService userContextService)
+		public JwtService(IRefreshTokenRepository refreshTokenRepository, IConfiguration config,
+			IEmployeeRepository employeeRepository)
 		{
 			_refreshTokenRepository = refreshTokenRepository;
 			_config = config;
 			_employeeRepository = employeeRepository;
-			_unitOfWork = unitOfWork;
 		}
 
 		public async Task<AuthResponse> GenerateTokenAsync(EmployeeEntity user, IList<string> roles)
 		{
 			var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
 			var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-			using var transactionScope = _unitOfWork.BeginTransaction();
 
 			var claims = new List<Claim>
 			{
@@ -60,54 +56,18 @@ namespace EmployeeBonusManagement.Application.Services
 				signingCredentials: creds
 			);
 
-			try
+			// Refresh token logic should be handled by the calling service
+			string refreshTokenValue = GenerateRefreshToken();
+
+			return new AuthResponse
 			{
-				var refreshTokenEntity = await _refreshTokenRepository.GetEmployeeRefreshTokenByIdAsync(user.Id);
-				var newRefreshTokenValue = GenerateRefreshToken();
-				var refreshTokenExpiryDays = Convert.ToInt32(_config["RefreshToken:ExpirationDays"]);
-
-				if (refreshTokenEntity == null)
-				{
-					Console.WriteLine("No refresh token found - creating a new one.");
-					var newRefreshToken = new RefreshTokenEntity
-					{
-						EmployeeId = user.Id,
-						ExpirationDate = DateTime.UtcNow.AddDays(refreshTokenExpiryDays),
-						RefreshToken = newRefreshTokenValue
-					};
-					await _refreshTokenRepository.AddNewRefreshTokenAsync(newRefreshToken);
-					refreshTokenEntity = newRefreshToken;
-				}
-				else if (refreshTokenEntity.ExpirationDate <= DateTime.UtcNow)
-				{
-					Console.WriteLine("Refresh token expired - updating with a new one.");
-					refreshTokenEntity.RefreshToken = newRefreshTokenValue;
-					refreshTokenEntity.ExpirationDate = DateTime.UtcNow.AddDays(refreshTokenExpiryDays);
-					await _refreshTokenRepository.UpdateRefreshTokenAsync(refreshTokenEntity);
-				}
-				else
-				{
-					Console.WriteLine("Existing refresh token is valid.");
-				}
-
-				_unitOfWork.Commit();
-
-				return new AuthResponse
-				{
-					Success = true,
-					AccessToken = new JwtSecurityTokenHandler().WriteToken(token),
-					RefreshToken = refreshTokenEntity.RefreshToken,
-					UserEmail = user.Email,
-					Roles = roles.ToList(),
-					Message = "Success"
-				};
-			}
-			catch (Exception ex)
-			{
-				_unitOfWork.Rollback();
-				Console.WriteLine($"Error while generating Token: {ex}");
-				return new AuthResponse { Success = false, Message = "Failed to generate authentication token." };
-			}
+				Success = true,
+				AccessToken = new JwtSecurityTokenHandler().WriteToken(token),
+				RefreshToken = refreshTokenValue, // Return the generated refresh token value
+				UserEmail = user.Email,
+				Roles = roles.ToList(),
+				Message = "Success"
+			};
 		}
 
 		public string GenerateRefreshToken()
@@ -127,12 +87,13 @@ namespace EmployeeBonusManagement.Application.Services
 
 			var roles = await _employeeRepository.GetUserRolesAsync(user.Id);
 
-			// Generate a new access token
 			var newAuthResponse = await GenerateTokenAsync(user, roles);
 
 			if (!newAuthResponse.Success)
 			{
-				return null; // Or handle the error appropriately
+				//TODO add logging  here 
+
+				return null; 
 			}
 
 			var newRefreshTokenValue = GenerateRefreshToken();
@@ -145,24 +106,14 @@ namespace EmployeeBonusManagement.Application.Services
 				RefreshToken = newRefreshTokenValue
 			};
 
-			using var transactionScope = _unitOfWork.BeginTransaction();
-			try
+			await _refreshTokenRepository.UpdateRefreshTokenAsync(newRefreshTokenEntity);
+				
+			return new RefreshTokenResponseDto
 			{
-				await _refreshTokenRepository.UpdateRefreshTokenAsync(newRefreshTokenEntity);
-				_unitOfWork.Commit();
-
-				return new RefreshTokenResponseDto
-				{
-					AccessToken = newAuthResponse.AccessToken,
-					RefreshToken = newRefreshTokenEntity.RefreshToken
-				};
-			}
-			catch (Exception ex)
-			{
-				_unitOfWork.Rollback();
-				Console.WriteLine($"Error while refreshing access token: {ex}");
-				return null; // Or handle the error appropriately
-			}
+				AccessToken = newAuthResponse.AccessToken,
+				RefreshToken = newRefreshTokenEntity.RefreshToken
+			};
+			
 		}
 	}
 }

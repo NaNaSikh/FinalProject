@@ -24,10 +24,10 @@ namespace EmployeeBonusManagementSystem.Api.Controllers
 	    {
 		    var result = await _mediator.Send(new LoginCommand(loginDto));
 
-		    if (result.Success)
-			    return Ok(result);
+		    
+			return Ok(result);
 
-		    return Unauthorized(new { message = "Invalid credentials" });
+		   // return Unauthorized(new { message = "Invalid credentials" });
 	    }
 
 	    [HttpPost("token/refresh")]

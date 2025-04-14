@@ -16,7 +16,6 @@ namespace EmployeeBonusManagementSystem.Application.Features.Employees.Queries.G
 		    public decimal Salary { get; set; }
 		    public DateTime HireDate { get; set; }
 		    public string UserName { get; set; }
-		    public int DepartmentId { get; set; }
 		    public int? RecommenderEmployeeId { get; set; }
 		    public String Role { get; set; }
 	    

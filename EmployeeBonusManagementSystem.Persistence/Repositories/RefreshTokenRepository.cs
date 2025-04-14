@@ -12,7 +12,6 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories
 {
     public class RefreshTokenRepository : IRefreshTokenRepository
 	{
-	    private readonly IUnitOfWork _unitOfWork;
 	    private IDbConnection _connection;
 	    private IDbTransaction _transaction;
 
@@ -26,11 +25,6 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories
 		    _transaction = transaction;
 	    }
 
-
-	    public RefreshTokenRepository(IUnitOfWork unitOfWork)
-	    {
-		    _unitOfWork = unitOfWork;
-	    }
 		public async Task<RefreshTokenEntity?> GetEmployeeRefreshTokenByIdAsync(int Id)
 	    {
 		    const string query = @"
@@ -40,6 +34,7 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories
 
 		    var ans =   await _connection.QueryFirstOrDefaultAsync<RefreshTokenEntity>(
 			    query, new { Id = Id },
+				transaction: _transaction,
 			    commandType: CommandType.Text
 		    );
 		    if (ans == null) return null;
@@ -52,7 +47,13 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories
 		    var query = "UPDATE RefreshToken SET RefreshToken = @RefreshToken , ExpirationDate = @ExpirationDate WHERE EmployeeId = @EmployeeId";
 
 		    await _connection.ExecuteAsync(
-			    query, new { RefreshToken = refreshToken.RefreshToken, ExpirationDate = refreshToken.ExpirationDate, EmployeeId = refreshToken.EmployeeId });
+			    query, new {
+					RefreshToken = refreshToken.RefreshToken,
+					ExpirationDate = refreshToken.ExpirationDate,
+					EmployeeId = refreshToken.EmployeeId },
+					transaction: _transaction,
+					commandType: CommandType.Text
+				);
 
 	    }
 
@@ -64,7 +65,12 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories
                 			VALUES (@EmployeeId, @RefreshToken , @ExpirationDate );";
 
 		    await _connection.ExecuteAsync(
-			    query, new { RefreshToken = refreshToken.RefreshToken, ExpirationDate = refreshToken.ExpirationDate, EmployeeId = refreshToken.EmployeeId });
+			    query, new { 
+					RefreshToken = refreshToken.RefreshToken,
+					ExpirationDate = refreshToken.ExpirationDate, 
+					EmployeeId = refreshToken.EmployeeId },
+					transaction: _transaction
+				);
 
 
 		}

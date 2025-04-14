@@ -9,14 +9,7 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories.Implementations
 	public class EmployeeRepository : IEmployeeRepository
 	{
 		private IDbTransaction _transaction;
-		private readonly IUnitOfWork _unitOfWork;
 		private IDbConnection _connection;
-
-		public EmployeeRepository(IUnitOfWork unitOfWork)
-		{
-			_unitOfWork = unitOfWork;
-		}
-
 		public void SetConnection(IDbConnection connection)
 		{
 			_connection = connection;
@@ -146,12 +139,16 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories.Implementations
 
         }
 
-        public async Task<EmployeeEntity> GetByEmailAsync(string email)
+        public async Task<EmployeeEntity?> GetByEmailAsync(string email)
         {
 
 			const string query = "SELECT * FROM Employees WHERE Email = @Email";
-			return await _connection.QueryFirstOrDefaultAsync<EmployeeEntity>(
-				query, new { Email = email }, commandType: CommandType.Text);
+
+			var employee = await _connection.QueryFirstOrDefaultAsync<EmployeeEntity>(
+				query, new { Email = email }, 
+				commandType: CommandType.Text ,
+				transaction: _transaction);
+			return employee;
 		}
 
         public async Task<IEnumerable<EmployeeEntity>> GetAllEmployeesAsync()
@@ -161,20 +158,20 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories.Implementations
 		}
         public async Task<List<string>> GetUserRolesAsync(int employeeId)
         {
-            string sql = @"
-            SELECT r.RoleName
-			FROM EmployeeRole er
-			INNER JOIN Roles r ON er.RoleId = r.RoleId
-			WHERE er.EmployeeId =  @EmployeeId";
+			string sql = @"
+                SELECT r.RoleName
+                FROM EmployeeRole er
+                INNER JOIN Roles r ON er.RoleId = r.RoleId
+                WHERE er.EmployeeId = @EmployeeId";
 
-            var roles = await _connection.QueryAsync<string>(
-                sql,
-                new { EmployeeId = employeeId },
-                _unitOfWork.BeginTransaction() 
-            );
+			var roles = await _connection.QueryAsync<string>(
+				sql,
+				new { EmployeeId = employeeId },
+				transaction: _transaction 
+			);
 
-            return roles.ToList();
-        }
+			return roles.ToList();
+		}
 
 
         public async Task<IEnumerable<EmployeeEntity>> GetEmployeeSalary(int Id)
@@ -185,7 +182,7 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories.Implementations
 				            FROM Employees 
 				            WHERE Id = @Id";
 
-			var result = await _connection.QueryAsync<EmployeeEntity>(query, new { Id = Id });
+			var result = await _connection.QueryAsync<EmployeeEntity>(query, new { Id = Id } , _transaction);
 			return result.ToList();
 		}
 
@@ -199,19 +196,18 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories.Implementations
 			            INNER JOIN Bonuses b ON e.Id = b.EmployeeId
 			            WHERE e.Id = @Id";
 
-			var bonuses = await _connection.QueryAsync<BonusEntity>(query, new { Id = Id });
+			var bonuses = await _connection.QueryAsync<BonusEntity>(query, new { Id = Id } , _transaction);
 			return bonuses.ToList();
 		}
 
         public async Task<IEnumerable<EmployeeEntity>> GetEmployeeRecommender(int Id)
         {
-            //TODO fix this 
             var query = @"
 			        SELECT recommender.FirstName, recommender.LastName
 					FROM Employees e
 					INNER JOIN Employees recommender ON e.RecommenderEmployeeId = recommender.Id
 					WHERE e.Id = @Id";
-            var recommender = await _connection.QueryAsync<EmployeeEntity>(query, new { Id = Id });
+            var recommender = await _connection.QueryAsync<EmployeeEntity>(query, new { Id = Id } , transaction: _transaction);
 
 			return recommender.ToList();
         }
@@ -224,7 +220,9 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories.Implementations
 								WHERE rt.RefreshToken = @RefreshToken";
 
 			var employee = await _connection.QueryFirstOrDefaultAsync<EmployeeEntity>(
-				query, new { RefreshToken = refreshToken });
+				query, new { RefreshToken = refreshToken },
+				transaction: _transaction ,
+				commandType: CommandType.Text);
 
 			return employee;
 		}

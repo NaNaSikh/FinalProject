@@ -17,13 +17,10 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories
     public class LoggingRepository : ILoggingRepository
     {
 	    private readonly ILogger<LoggingRepository> _logger;
-	    private readonly IUnitOfWork _unitOfWork;
 
-		public LoggingRepository(ILogger<LoggingRepository> logger, IUnitOfWork unitOfWork)
+		public LoggingRepository(ILogger<LoggingRepository> logger)
 	    {
 		    _logger = logger;
-		    _unitOfWork = unitOfWork;
-
 		}
 
 		private IDbConnection _connection;
@@ -59,9 +56,9 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories
 					ActionType = logsEntity.ActionType,
 					Request = logsEntity.Request,
 					Response = logsEntity.Response
-				}, _transaction);  // ✅ Use existing transaction
+				}, _transaction);  
 
-				// ✅ Do NOT commit or rollback here, let the UoW handle it
+				
 			}
 			catch (Exception ex)
 			{

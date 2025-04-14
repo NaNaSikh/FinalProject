@@ -22,7 +22,7 @@ namespace EmployeeBonusManagementSystem.Api.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllEmployees()
         {
             var employees = await _mediator.Send(new GetAllEmployeesQuery());

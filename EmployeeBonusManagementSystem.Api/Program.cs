@@ -96,7 +96,7 @@ builder.Services.AddAuthorization(options =>
 });
 
 
-var app = builder.Build();
+ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseHttpsRedirection();

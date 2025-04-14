@@ -15,7 +15,6 @@ namespace EmployeeBonusManagement.Application.Services.Interfaces
         
 	    Task<AuthResponse> LoginAsync(LoginDto loginDto);
 	    bool ValidatePassword(string password, out string errorMessage);
-	    Task<bool> CheckPasswordAsync(EmployeeEntity user, string enteredPassword);
 	    Task<PasswordVerificationResult> CheckPasswordByIdAsync(int id, string enteredPassword);
 
     }

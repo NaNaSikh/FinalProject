@@ -45,6 +45,8 @@ public static class PersistenceDI
         services.AddScoped<ISqlCommandRepository, SqlCommandRepository>();
         services.AddScoped<ILoggingRepository, LoggingRepository>();
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+        services.AddScoped<ICheckPasswordService, CheckPasswordService>();
+
 
 		//services.AddScoped<IHttpContextAccessor>();
 

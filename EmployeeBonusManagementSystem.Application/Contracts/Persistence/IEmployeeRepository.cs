@@ -8,7 +8,7 @@ public interface IEmployeeRepository
 {
 	Task AddEmployeeAsync(EmployeeEntity employee, string role);
 	Task<IEnumerable<EmployeeEntity>> GetAllEmployeesAsync();
-	Task<EmployeeEntity> GetByEmailAsync(string email);
+	Task<EmployeeEntity?> GetByEmailAsync(string email);
 	Task<List<string>> GetUserRolesAsync(int employeeId);
 	Task<IEnumerable<EmployeeEntity>> GetEmployeeSalary(int Id);
 	Task<IEnumerable<BonusEntity>> GetEmployeeBonus(int Id);
