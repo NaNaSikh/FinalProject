@@ -16,7 +16,7 @@ public interface IEmployeeRepository
     Task<(bool, int)> GetEmployeeExistsByPersonalNumberAsync(string personalNumber);
 	Task UpdateEmployeePasswordByIdAsync(int Id, string newHashedPassword);
 	Task<EmployeeEntity> GetUserByRefreshTokenAsync(string refreshToken);
-	Task<string> GetEmployeePasswordByIdAsync(int Id);
+	Task<string?> GetEmployeePasswordByIdAsync(int Id);
 }
 
 

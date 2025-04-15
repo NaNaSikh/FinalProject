@@ -22,7 +22,6 @@ namespace EmployeeBonusManagementSystem.Api.Controllers
         }
 
         [HttpGet]
-        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllEmployees()
         {
             var employees = await _mediator.Send(new GetAllEmployeesQuery());
@@ -30,7 +29,7 @@ namespace EmployeeBonusManagementSystem.Api.Controllers
         }
 
         [HttpPost("add")]
-        //[Authorize(Roles = "Admin")] 
+        [Authorize(Roles = "Admin")] 
         public async Task<IActionResult> AddEmployee([FromBody] EmployeeDto employeeDto)
         {
             var result = await _mediator.Send(new AddEmployeeCommand(employeeDto));

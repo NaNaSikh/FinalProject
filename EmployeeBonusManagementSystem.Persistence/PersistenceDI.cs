@@ -9,6 +9,7 @@ using EmployeeBonusManagementSystem.Persistence.Repositories;
 using EmployeeBonusManagementSystem.Persistence.Repositories.Common;
 using EmployeeBonusManagementSystem.Persistence.Repositories.Implementations;
 using EmployeeBonusManagementSystem.Persistence.Services;
+using EmployeeBonusManagementSystem.Persistence.Services.Interfaces;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -46,9 +47,7 @@ public static class PersistenceDI
         services.AddScoped<ILoggingRepository, LoggingRepository>();
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
         services.AddScoped<ICheckPasswordService, CheckPasswordService>();
-
-
-		//services.AddScoped<IHttpContextAccessor>();
+		services.AddScoped<IDateService, DateService>();
 
 		services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -56,11 +55,7 @@ public static class PersistenceDI
         services.AddScoped<IJwtService, JwtService>();
         services.AddScoped<IUserContextService, UserContextService>();
 
-
-        //	services.AddScoped<IRequestHandler<AddEmployeeCommand, bool>, AddEmployeeCommandHandler>();
-
         return services;
-
 
     }
 }

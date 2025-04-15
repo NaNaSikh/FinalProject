@@ -1,6 +1,8 @@
 ﻿using Dapper;
 using EmployeeBonusManagementSystem.Application.Contracts.Persistence;
 using EmployeeBonusManagementSystem.Domain.Entities;
+using EmployeeBonusManagementSystem.Domain.Enums;
+
 using Microsoft.AspNetCore.Identity;
 using System.Data;
 
@@ -63,13 +65,9 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories.Implementations
 				var employeeId = await _connection.QuerySingleAsync<int>(query, employee, _transaction);
 
 
-				// fix this 
-				int roleId = role.ToLower() switch
-				{
-					"admin" => 1,
-					"user" => 2,
-					_ => throw new ArgumentException($"Invalid role: {role}")
-				};
+				if (!Enum.TryParse<Role>(role, true, out var roleId))
+					throw new ArgumentException($"Invalid role: {role}");
+
 
 				var roleQuery = @"
                     INSERT INTO EmployeeRole (EmployeeId, RoleId)
@@ -114,7 +112,7 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories.Implementations
 		}
 
 
-		public async Task<string> GetEmployeePasswordByIdAsync(int Id)
+		public async Task<string?> GetEmployeePasswordByIdAsync(int Id)
         {
 			const string query = @"
 				        SELECT  Password 
@@ -169,7 +167,6 @@ namespace EmployeeBonusManagementSystem.Persistence.Repositories.Implementations
 				new { EmployeeId = employeeId },
 				transaction: _transaction 
 			);
-
 			return roles.ToList();
 		}
 
