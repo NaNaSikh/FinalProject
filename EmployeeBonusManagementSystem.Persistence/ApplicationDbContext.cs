@@ -18,8 +18,12 @@ public class ApplicationDbContext : DbContext
     public DbSet<RecommenderEmployeeEntity> RecommenderEmployees { get; set; }
     public DbSet<RolesEntity> Roles { get; set; }
     public DbSet<EmployeeRoleEntity> EmployeeRole { get; set; }
+	public DbSet<ErrorLogsEntity> ErrorLogs { get; set; }
+	public DbSet<LogsEntity> Logs { get; set; }
+	public DbSet<RefreshTokenEntity> RefreshToken { get; set; }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+
+	protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
     }
