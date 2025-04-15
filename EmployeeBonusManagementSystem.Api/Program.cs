@@ -83,13 +83,13 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("User", policy =>
     {
         policy.RequireAuthenticatedUser();
-        policy.RequireRole("User" , "Admin"); 
+        policy.RequireRole("User", "Admin");
     });
 
     options.AddPolicy("Admin", policy =>
     {
         policy.RequireAuthenticatedUser();
-        policy.RequireRole("Admin"); 
+        policy.RequireRole("Admin");
     });
 });
 
@@ -98,5 +98,6 @@ builder.Services.AddAuthorization(options =>
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseHttpsRedirection();
+
 app.MapControllers();
 app.Run();

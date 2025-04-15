@@ -1,7 +1,8 @@
 ﻿---ბონუსის ჩარიცხვა
-
 --USE [HRManagementEmployee]
 --GO
+--/****** Object:  StoredProcedure [dbo].[AddBonuses]    Script Date: 3/27/2025 2:52:07 PM ******/
+--SET ANSI_NULLS ON
 --GO
 --SET QUOTED_IDENTIFIER ON
 ----GO
@@ -25,25 +26,54 @@
 --        RETURN;
 --    END;
 
+--    -- პროცენტის გამოთვლა
 --    SET @BonusPercentage = (@BonusAmount / @Salary) * 100;
 
---    SELECT @MaxBonusAmount = MaxBonusAmount, @MaxBonusPercentage = MaxBonusPercentage,
---           @MinBonusPercentage = MinBonusPercentage, @MaxRecommendationLevel = MaxRecommendationLevel,
+--    -- კონფიგურაციის წამოღება
+--    SELECT @MaxBonusAmount = MaxBonusAmount,
+--           @MaxBonusPercentage = MaxBonusPercentage,
+--           @MinBonusPercentage = MinBonusPercentage,
+--           @MaxRecommendationLevel = MaxRecommendationLevel,
 --           @RecommendationBonusRate = RecommendationBonusRate
 --    FROM BonusConfigurations;
 
+--    -- თანხის ლიმიტი
 --    IF @BonusAmount > @MaxBonusAmount
 --    BEGIN
 --        THROW 50001, 'ბონუსის თანხა სცდება ლიმიტს.', 1;
 --        RETURN;
 --    END;
 
+--    -- მინიმუმი
 --    IF @BonusPercentage < @MinBonusPercentage
 --    BEGIN
 --        THROW 50002, 'ბონუსის პროცენტი ნაკლებია მინიმუმზე.', 1;
 --        RETURN;
 --    END;
 
+--    -- ჯამური ბონუსის ლიმიტი თვეში
+--    DECLARE @CurrentMonthStart DATE = DATEFROMPARTS(YEAR(@CreateDate), MONTH(@CreateDate), 1);
+--    DECLARE @CurrentMonthEnd DATE = EOMONTH(@CreateDate);
+--    DECLARE @TotalBonusThisMonth DECIMAL(18,2);
+
+--    SELECT @TotalBonusThisMonth = ISNULL(SUM(Amount), 0)
+--    FROM Bonuses
+--    WHERE EmployeeId = @EmployeeId
+--      AND IsRecommenderBonus = 0
+--      AND CreateDate >= @CurrentMonthStart AND CreateDate <= @CurrentMonthEnd;
+
+--    SET @TotalBonusThisMonth += @BonusAmount;
+
+--    DECLARE @TotalBonusPercentage DECIMAL(18,2);
+--    SET @TotalBonusPercentage = (@TotalBonusThisMonth / @Salary) * 100;
+
+--    IF @TotalBonusPercentage > @MaxBonusPercentage
+--    BEGIN
+--        THROW 50004, 'ბონუსების ჯამი თვის განმავლობაში აღემატება დასაშვებ მაქსიმალურ პროცენტს.', 1;
+--        RETURN;
+--    END;
+
+--    -- ქართული თვე
 --    DECLARE @GeorgianMonth NVARCHAR(20)
 --    SET @GeorgianMonth = CASE DATENAME(MONTH, @CreateDate)
 --        WHEN 'January' THEN N'იანვრის'
@@ -60,7 +90,7 @@
 --        WHEN 'December' THEN N'დეკემბრის'
 --    END;
 
---    -- ძირითადი ბონუსი
+--    -- თანამშრომლის ძირითადი ბონუსი
 --    INSERT INTO Bonuses (EmployeeId, Amount, IsRecommenderBonus, Reason, CreateDate, CreateByUserId, RecommendationLevel, TransactionId)
 --    VALUES (@EmployeeId, @BonusAmount, 0, @GeorgianMonth + N' თვის ბონუსის ჩარიცხვა', @CreateDate, @CreateByUserId, 0, @TransactionId);
 
@@ -94,7 +124,7 @@
 --        SET @Level += 1;
 --    END;
 
---    -- მონაცემების წამოღება
+--    -- მონაცემების წამორება
 --    SELECT 
 --        b.EmployeeId,
 --        b.Amount,
@@ -110,6 +140,7 @@
 --    JOIN Employees e ON e.Id = b.EmployeeId
 --    WHERE b.TransactionId = @TransactionId;
 --END
+
 
 
 --კონფიგურაციის მართვა
