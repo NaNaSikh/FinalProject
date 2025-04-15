@@ -56,14 +56,14 @@ namespace EmployeeBonusManagement.Application.Services
 				signingCredentials: creds
 			);
 
-			// Refresh token logic should be handled by the calling service
+			
 			string refreshTokenValue = GenerateRefreshToken();
 
 			return new AuthResponse
 			{
 				Success = true,
 				AccessToken = new JwtSecurityTokenHandler().WriteToken(token),
-				RefreshToken = refreshTokenValue, // Return the generated refresh token value
+				RefreshToken = refreshTokenValue, 
 				UserEmail = user.Email,
 				Roles = roles.ToList(),
 				Message = "Success"
@@ -91,9 +91,10 @@ namespace EmployeeBonusManagement.Application.Services
 
 			if (!newAuthResponse.Success)
 			{
-				//TODO add logging  here 
-
-				return null; 
+				return new RefreshTokenResponseDto
+				{
+					Message = "error Generating new Token "
+				};
 			}
 
 			var newRefreshTokenValue = GenerateRefreshToken();

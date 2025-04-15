@@ -24,9 +24,10 @@ namespace EmployeeBonusManagementSystem.Application.Features.Employees.Commands.
 	    private readonly ILoggingRepository _loggingRepository;
 	    private readonly ILogger<ChangePasswordCommandHandler> _logger;
 	    private readonly IUnitOfWork _unitOfWork;
+		private readonly ICheckPasswordService _checkPasswordService;
 
 
-		public ChangePasswordCommandHandler (IUnitOfWork unitOfWork ,  IEmployeeRepository employeeRepository, IUserContextService userContextService , IAuthService authService ,ILoggingRepository loggingRepository, ILogger<ChangePasswordCommandHandler> logger)
+		public ChangePasswordCommandHandler (IUnitOfWork unitOfWork ,  IEmployeeRepository employeeRepository, IUserContextService userContextService , IAuthService authService ,ILoggingRepository loggingRepository, ILogger<ChangePasswordCommandHandler> logger , ICheckPasswordService checkPasswordService)
 		{
 			_employeeRepository = employeeRepository;
 			_userContextService = userContextService;
@@ -34,6 +35,7 @@ namespace EmployeeBonusManagementSystem.Application.Features.Employees.Commands.
 			_loggingRepository = loggingRepository;
 			_logger = logger;
 			_unitOfWork = unitOfWork;
+			_checkPasswordService = checkPasswordService;
 
 		}
 
@@ -41,7 +43,7 @@ namespace EmployeeBonusManagementSystem.Application.Features.Employees.Commands.
 
 		{
 
-			if (_authService.ValidatePassword(request.newPassword, out string message))
+			if (_checkPasswordService.ValidatePassword(request.newPassword, out string message))
 			{
 				int userId = _userContextService.GetUserId();
 
@@ -53,7 +55,7 @@ namespace EmployeeBonusManagementSystem.Application.Features.Employees.Commands.
 
 						_logger.LogInformation("User {UserId} initiated a password change request.", userId);
 
-						var result = await _authService.CheckPasswordByIdAsync(userId, request.currentPassword);
+						var result = await _checkPasswordService.CheckPasswordByIdAsync(userId, request.currentPassword);
 
 						if (result == PasswordVerificationResult.Success)
 						{

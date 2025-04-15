@@ -52,7 +52,7 @@ public class BonusRepository() : IBonusRepository
     {
         try
         {
-			var result = await _connection.QueryAsync<UpsertBonusConfigurationDto>( // Use _connection
+			var result = await _connection.QueryAsync<UpsertBonusConfigurationDto>( 
 				"UpsertBonusConfiguration",
 				new
 				{
@@ -64,7 +64,7 @@ public class BonusRepository() : IBonusRepository
 					CreateByUserId = userId
 				},
 				commandType: CommandType.StoredProcedure,
-				transaction: _transaction // Use _transaction
+				transaction: _transaction 
 			);
 
 			return result.ToList();

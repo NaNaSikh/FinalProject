@@ -51,53 +51,6 @@ namespace EmployeeBonusManagement.Application.Services
 			return response;
 		}
 
-		public bool ValidatePassword(string password, out string errorMessage)
-		{
-			errorMessage = string.Empty;
-
-			if (string.IsNullOrWhiteSpace(password))
-			{
-				errorMessage = "Password cannot be empty.";
-				return false;
-			}
-
-			if (password.Length < 8)
-			{
-				errorMessage = "Password must be at least 8 characters long.";
-				return false;
-			}
-
-			if (!Regex.IsMatch(password, @"[A-Za-z]"))
-			{
-				errorMessage = "Password must contain at least one letter.";
-				return false;
-			}
-
-			if (!Regex.IsMatch(password, @"\d"))
-			{
-				errorMessage = "Password must contain at least one number.";
-				return false;
-			}
-
-			return true;
-		}
-
-
-
-
-		public async Task<PasswordVerificationResult> CheckPasswordByIdAsync(int id, string enteredPassword)
-		{
-			var userPassword = await _employeeRepository.GetEmployeePasswordByIdAsync(id);
-
-			if (string.IsNullOrEmpty(userPassword))
-			{
-				return PasswordVerificationResult.Failed;
-			}
-
-			var hasher = new PasswordHasher<EmployeeEntity>();
-			return hasher.VerifyHashedPassword(null, userPassword, enteredPassword);
-		}
-
 	}
 }
 

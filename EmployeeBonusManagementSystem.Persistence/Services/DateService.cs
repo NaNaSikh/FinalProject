@@ -14,12 +14,13 @@ namespace EmployeeBonusManagementSystem.Persistence.Services
 		public  (DateTime Start, DateTime End) GetDateRange(TimeRange range)
 		{
 			var end = DateTime.UtcNow;
+			var sqlMinDate = new DateTime(1999, 1, 1);
 			return range switch
 			{
 				TimeRange.OneMonth => (end.AddMonths(-1), end),
 				TimeRange.ThreeMonths => (end.AddMonths(-3), end),
 				TimeRange.OneYear => (end.AddYears(-1), end),
-				TimeRange.AllTime => (DateTime.MinValue, end),
+				TimeRange.AllTime => (sqlMinDate, end),
 				_ => throw new ArgumentOutOfRangeException(nameof(range), range, null)
 			};
 		}
