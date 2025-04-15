@@ -9,7 +9,6 @@ using EmployeeBonusManagementSystem.Persistence.Repositories;
 using EmployeeBonusManagementSystem.Persistence.Repositories.Common;
 using EmployeeBonusManagementSystem.Persistence.Repositories.Implementations;
 using EmployeeBonusManagementSystem.Persistence.Services;
-using EmployeeBonusManagementSystem.Persistence.Services.Interfaces;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

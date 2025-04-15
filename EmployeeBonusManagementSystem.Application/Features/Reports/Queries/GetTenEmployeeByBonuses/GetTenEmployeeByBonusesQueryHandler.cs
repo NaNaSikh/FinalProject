@@ -7,9 +7,7 @@ using System.Threading.Tasks;
 
 namespace EmployeeBonusManagementSystem.Application.Features.Reports.Queries.GetTenEmployeeByBonuses;
 
-internal class GetTenEmployeeByBonusesQueryHandler(
-    IReportRepository reportRepository)
-    : IRequestHandler<GetTenEmployeeByBonusesQuery, List<EmployeeBonusesDto>>
+internal class GetTenEmployeeByBonusesQueryHandler( IReportRepository reportRepository): IRequestHandler<GetTenEmployeeByBonusesQuery, List<EmployeeBonusesDto>>
 {
     public async Task<List<EmployeeBonusesDto>> Handle(
         GetTenEmployeeByBonusesQuery request,

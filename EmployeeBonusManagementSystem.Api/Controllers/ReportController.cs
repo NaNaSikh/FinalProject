@@ -6,7 +6,6 @@ using EmployeeBonusManagementSystem.Application.Features.Reports.Queries.GetTota
 using EmployeeBonusManagementSystem.Application.Features.Reports.Queries.GetTotalSalariesByDepartment;
 using EmployeeBonusManagementSystem.Domain.Enums;
 using EmployeeBonusManagementSystem.Persistence.Services;
-using EmployeeBonusManagementSystem.Persistence.Services.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
@@ -34,9 +33,9 @@ public class ReportController : ControllerBase
 	}
 
 	[HttpGet("employees/top-ten-by-bonuses")]
-	public async Task<ActionResult<List<EmployeeBonusesDto>>> GetTopTenEmployeesByBonuses([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+	public async Task<ActionResult<List<EmployeeBonusesDto>>> GetTopTenEmployeesByBonuses([FromQuery] GetTenEmployeeByBonusesQuery getTenEmployeeByBonusesQuery)
 	{
-		var result = await _reportRepository.GetTenEmployeeByBonusesAsync(startDate, endDate);
+		var result = await _mediator.Send(getTenEmployeeByBonusesQuery);
 		return Ok(result);
 	}
 
@@ -44,29 +43,29 @@ public class ReportController : ControllerBase
 	public async Task<ActionResult<List<EmployeeBonusesDto>>> GetTopTenEmployeesByBonusesByTime([FromQuery] TimeRange timeRange)
 	{
 		var (startDate, endDate) = _dateService.GetDateRange(timeRange);
-		var result = await _reportRepository.GetTenEmployeeByBonusesAsync(startDate, endDate);
+		var result = await _mediator.Send(new GetTenEmployeeByBonusesQuery(startDate, endDate));
 		return Ok(result);
 	}
 
 
 	[HttpGet("recommenders/top-ten")]
-	public async Task<ActionResult<List<RecommenderBonusesDto>>> GetTopTenRecommenders([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+	public async Task<ActionResult<List<RecommenderBonusesDto>>> GetTopTenRecommenders([FromQuery] GetTenRecommenderByBonusesQuery  getTenRecommenderByBonusesQuery)
 	{
-		var result = await _reportRepository.GetTenRecommenderByBonusesAsync(startDate, endDate);
+		var result = await _mediator.Send(getTenRecommenderByBonusesQuery);
 		return Ok(result);
 	}
 
 	[HttpGet("departments/salaries/total")]
-	public async Task<ActionResult<List<DepartmentSalaryDto>>> GetTotalSalariesByDepartment([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+	public async Task<ActionResult<List<DepartmentSalaryDto>>> GetTotalSalariesByDepartment([FromQuery] GetTotalSalariesByDepartmentQuery getTotalSalariesByDepartmentQuery)
 	{
-		var result = await _reportRepository.GetTotalSalariesByDepartmentAsync(startDate, endDate);
+		var result = await _mediator.Send(getTotalSalariesByDepartmentQuery);
 		return Ok(result);
 	}
 
 	[HttpGet("departments/bonuses/total")]
-	public async Task<ActionResult<List<DepartmentBonusesDto>>> GetTotalBonusesByDepartment([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+	public async Task<ActionResult<List<DepartmentBonusesDto>>> GetTotalBonusesByDepartment([FromQuery] GetTotalBonusesByDepartmentQuery getTotalBonusesByDepartmentQuery)
 	{
-		var result = await _reportRepository.GetTotalBonusesByDepartmentAsync(startDate, endDate);
+		var result = await _mediator.Send(getTotalBonusesByDepartmentQuery);
 		return Ok(result);
 	}
 }

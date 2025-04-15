@@ -1,5 +1,5 @@
 ﻿using EmployeeBonusManagementSystem.Domain.Enums;
-using EmployeeBonusManagementSystem.Persistence.Services.Interfaces;
+using EmployeeBonusManagementSystem.Application.Contracts.Persistence;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace EmployeeBonusManagementSystem.Application.Features.Reports.Queries.GetTenEmployeeByBonuses;
+    namespace EmployeeBonusManagementSystem.Application.Features.Reports.Queries.GetTenEmployeeByBonuses;
 
 public record GetTenEmployeeByBonusesQuery(
     DateTime StartDate,

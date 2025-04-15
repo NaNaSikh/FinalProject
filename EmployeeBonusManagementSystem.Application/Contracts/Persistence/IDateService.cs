@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EmployeeBonusManagementSystem.Persistence.Services.Interfaces
+namespace EmployeeBonusManagementSystem.Application.Contracts.Persistence
 {
 	public interface IDateService
     {
