@@ -29,15 +29,6 @@ public static class PersistenceDI
         services.AddScoped<IDbConnection>(provider =>
             new SqlConnection(configuration.GetConnectionString("DefaultConnection")));
 
-
-		services.AddScoped<IDbTransaction>(provider =>
-		{
-			var connection = provider.GetRequiredService<IDbConnection>();
-			connection.Open();
-			return connection.BeginTransaction();
-		});
-
-
         services.AddScoped<IEmployeeRepository, EmployeeRepository>();
         services.AddScoped<IBonusRepository, BonusRepository>();
         services.AddScoped<IReportRepository, ReportRepository>();
