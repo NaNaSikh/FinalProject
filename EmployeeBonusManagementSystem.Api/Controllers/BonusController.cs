@@ -36,6 +36,5 @@ public class BonusController : ControllerBase
         return Ok(result);
     }
 
-
 }
 

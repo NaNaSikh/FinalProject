@@ -2,8 +2,6 @@
 using EmployeeBonusManagement.Application.Services.Interfaces;
 using EmployeeBonusManagementSystem.Application.Contracts.Persistence;
 using EmployeeBonusManagementSystem.Application.Contracts.Persistence.Common;
-using EmployeeBonusManagementSystem.Application.Features.Employees.Commands.AddEmployee;
-using EmployeeBonusManagementSystem.Domain.Entities;
 using EmployeeBonusManagementSystem.Infrastructure.Repositories;
 using EmployeeBonusManagementSystem.Persistence.Repositories;
 using EmployeeBonusManagementSystem.Persistence.Repositories.Common;
@@ -37,9 +35,9 @@ public static class PersistenceDI
         services.AddScoped<ILoggingRepository, LoggingRepository>();
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
         services.AddScoped<ICheckPasswordService, CheckPasswordService>();
-		services.AddScoped<IDateService, DateService>();
+        services.AddScoped<IDateService, DateService>();
 
-		services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IJwtService, JwtService>();
