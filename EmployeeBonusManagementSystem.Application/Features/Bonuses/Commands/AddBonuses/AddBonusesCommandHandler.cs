@@ -6,7 +6,9 @@ using System.Text.Json;
 
 namespace EmployeeBonusManagementSystem.Application.Features.Bonuses.Commands.AddBonuses;
 
-public class AddBonusesQueryHandler(IUnitOfWork unitOfWork, IUserContextService userContextService, ILoggingRepository loggingRepository)
+public class AddBonusesQueryHandler(IUnitOfWork unitOfWork,
+    IUserContextService userContextService,
+    ILoggingRepository loggingRepository)
     : IRequestHandler<AddBonusesCommand, List<AddBonusesDto>>
 {
     public async Task<List<AddBonusesDto>> Handle(
