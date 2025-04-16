@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -11,9 +10,9 @@ namespace EmployeeBonusManagementSystem.Persistence.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropCheckConstraint(
-                name: "CK_Bonuses_CreateDate",
-                table: "Bonuses");
+            //migrationBuilder.DropCheckConstraint(
+            //    name: "CK_Bonuses_CreateDate",
+            //    table: "Bonuses");
 
             migrationBuilder.CreateTable(
                 name: "RefreshToken",

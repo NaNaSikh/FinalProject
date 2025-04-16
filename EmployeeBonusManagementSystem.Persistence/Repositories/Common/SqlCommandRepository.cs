@@ -10,22 +10,22 @@ public class SqlCommandRepository
 {
 
 
-	private IDbConnection _connection;
-	private IDbTransaction _transaction;
+    private IDbConnection _connection;
+    private IDbTransaction _transaction;
 
-	public void SetConnection(IDbConnection connection)
-	{
-		_connection = connection;
-	}
+    public void SetConnection(IDbConnection connection)
+    {
+        _connection = connection;
+    }
 
-	public void SetTransaction(IDbTransaction transaction)
-	{
-		_transaction = transaction;
-	}
+    public void SetTransaction(IDbTransaction transaction)
+    {
+        _transaction = transaction;
+    }
 
-	public async Task<int> SaveData<T>(string sql, T parameters,
-								     string connectionId = "Default",
-								     CommandType commandType = CommandType.StoredProcedure)
+    public async Task<int> SaveData<T>(string sql, T parameters,
+                                     string connectionId = "Default",
+                                     CommandType commandType = CommandType.StoredProcedure)
     {
         using IDbConnection connection = new SqlConnection(connectionId);
         return await connection.ExecuteAsync(

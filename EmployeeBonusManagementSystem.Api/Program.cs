@@ -1,9 +1,7 @@
 ﻿using EmployeeBonusManagementSystem.Application;
-using EmployeeBonusManagementSystem.Application.Contracts.Persistence;
 using EmployeeBonusManagementSystem.Application.Features.Employees.Commands.AddEmployee;
 using EmployeeBonusManagementSystem.Application.Mapping;
 using EmployeeBonusManagementSystem.Persistence;
-using EmployeeBonusManagementSystem.Persistence.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -98,6 +96,9 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
+app.UseRouting();
 
 app.MapControllers();
 app.Run();
